@@ -1,6 +1,6 @@
 # HindSiteTrader.com
 ### a stock market time machine by:
-### Billy Bunn, Harrison Cogswell, Andrew Curtis, and Liz Kavalski
+### *Billy Bunn, Harrison Cogswell, Andrew Curtis, and Liz Kavalski*
 
 ## Overview
 
@@ -11,4 +11,4 @@
 ## Changelog
 
 ## Credits
-Powered: Alphavantage
+*Powered: Alphavantage*
