@@ -11,4 +11,4 @@
 ## Changelog
 
 ## Credits
-*Powered: Alphavantage*
+*Powered by: Alphavantage*
