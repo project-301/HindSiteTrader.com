@@ -1,0 +1,27 @@
+{
+  "name": "hindsitetrader.com",
+  "version": "1.0.0",
+  "description": "a stock market time machine by: Billy Bunn, Harrison Cogswell, Andrew Curtis, and Liz Kavalski",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/project-301/HindSiteTrader.com.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/project-301/HindSiteTrader.com/issues"
+  },
+  "homepage": "https://github.com/project-301/HindSiteTrader.com#readme",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "pg": "^7.8.1",
+    "superagent": "^4.1.0"
+  }
+}
