@@ -1,15 +1,8 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <Title>HindSiteTrader.com: a Stock Market Time Machine</Title>
-    <link href="/styles/reset.css" rel="stylesheet" type="text/css"/>
-  </head>
+  <%- include layout/head.ejs %>
   <body>
-    <header>
-      <img src="https://image.flaticon.com/icons/svg/90/90432.svg" alt="Analytic free icon by Freepik @ Flaticon.com" height="100"/>
-      <h1>HindSiteTrader.com</h1>
-      <img src="https://image.flaticon.com/icons/svg/1063/1063376.svg" alt="Portfolio free icon by Freepik @ Flaticon.com" height="100"/>
-    </header>
+    <%- include layout/header.ejs %>
     <main>
       <form>
         <fieldset>
@@ -21,5 +14,6 @@
           <button type="submit">Find Out!</button></label>
       </form>
     </main>
+    <%- include layout/footer.ejs %>
   </body>
 </html>

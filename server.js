@@ -12,7 +12,7 @@ app.set('view engine', 'ejs');
 app.use(express.static('./public'));
 
 app.get('/', getSearchForm);
-app.get('*', (request, response) => response.render('index.ejs'));
+app.get('*', (request, response) => response.render('error.ejs'));
 
 app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
 
