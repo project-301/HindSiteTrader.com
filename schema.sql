@@ -1,4 +1,4 @@
-DROP TABLE portfolio; -- Removed graph_data table
+DROP TABLE portfolio;
 
 -- Per convo with Sam on Monday...
 -- We should store graph coordinates inside of our portfolio table (no need for a second table)
@@ -19,16 +19,6 @@ CREATE TABLE IF NOT EXISTS portfolio (
   graph_data TEXT -- long string of prices separated by commas
 );
 
--- Probably won't use a second table and will just store data in single table
--- CREATE TABLE IF NOT EXISTS graph_data (
---   id SERIAL PRIMARY KEY,
---   -- TODO Add coordinate x data
---   -- TODO Add coordinate y data
---   portfolio_id INTEGER NOT NULL,
---   FOREIGN KEY (portfolio_id) REFERENCES portfolio (id)
--- );
-
--- INSERT INTO portfolio (symbol, name, search_date, search_date_price, past_price, past_date, investment, graph_labels, graph_data) VALUES ('AAPL', 'Apple Inc.', ) RETURNING id;
 INSERT INTO portfolio (symbol, name, search_date, search_date_price, past_price, past_date, investment, graph_labels, graph_data) VALUES ('MSFT', 
 'Microsoft Corporation', 
 888537600, 
