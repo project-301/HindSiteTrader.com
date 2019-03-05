@@ -15,6 +15,18 @@ fieldset {
     flex-flow: column, nowrap;
     align-items: center;
 }
+div {
+    border: 2px inset hsl(44, 79%, 96%);
+    border-radius: 10px;
+    background-color: hsl(266, 69%, 95%);
+    color: #fff27f;
+    color: hsl(266, 69%, 40%);
+    padding: 3vh 5vw 0;
+    margin-bottom: 1vh;
+}
+div h2 {
+    margin-bottom: 3vh;
+}
 footer {
     font-size: .5em;
     font-family: sans-serif;

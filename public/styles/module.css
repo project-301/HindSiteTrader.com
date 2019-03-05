@@ -11,7 +11,7 @@ fieldset{
     font-size: 3vh;
     border: 3px inset hsl(44, 79%, 96%);
     border-radius: 10px;
-    background-color: hsl(0, 0%, 87%);
+    background-color: hsl(266, 69%, 95%);
     margin-bottom: 2vh;
     line-height: 2em;
 }
@@ -19,7 +19,7 @@ input{
     display: block;
     width: 100%;
     font-size: 5vh;
-    border: 2px dashed hsl(44, 79%, 86%);
+    border: 2px dashed hsl(266, 69%, 85%);
     background-color: white;
     border-radius: 3px;
     padding: 1px 2px;
@@ -30,25 +30,34 @@ form > p{
     font-size: 2.5vh;
     text-align: center;
 }
-form > button {
+button {
     display: block;
-    margin: 3vh auto;
-    padding: 3vh 10vw;
-    font-size: 2.5vh;
+    margin: 1vh auto;
+    padding: 2vh 10vw;
+    font-size: 4vh;
     font-family: 'Nanum Gothic Coding', monospace;
-    font-weight: bold;
     border: solid 3px hsl(14, 98%, 22%);
     border-radius: 5px; 
     background-color: hsl(14, 98%, 22%);
     color: white;
 }
-form > button:hover{
+button:hover{
     background-color:hsl(217, 96%, 64%);
-    border: inset 2px hsl(217, 96%, 64%);
+    border: inset 3px hsl(217, 96%, 64%);
 }
+p {
+    font-size: 1.2em;
+    margin-bottom: .5em;
+}
+button+p {
+    margin-top: 5vh;
+    font-size: 1.5em;
+}
+
 footer a {
     color: white;
     font-size: 2vh;
     font-family: 'Nanum Gothic Coding', monospace;
     line-height: 5vh;
+    border-bottom: 1px solid hsl(14, 98%, 22%);
 }
