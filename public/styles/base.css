@@ -1,7 +1,14 @@
-* { box-sizing: border-box; }
+* { 
+    box-sizing: border-box; 
+    text-align: center;
+}
 
 body{
     background-color: hsl(44, 79%, 96%);
     padding: 0 1vw;
     font-family: monospace;
+}
+
+a {
+    text-decoration: none;
 }
