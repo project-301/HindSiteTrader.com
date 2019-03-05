@@ -1,3 +1,35 @@
 header{
-    display: grid;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+    background-color: hsl(44, 79%, 86%);
+    border-radius: 0px 0px 20px 20px;
+    margin-bottom: 1vh;
+    padding: 2vh;
+}
+fieldset {
+    height: 60vh;
+    padding: 2vh 2vw;
+    display: flex;
+    flex-flow: column, nowrap;
+    align-items: center;
+}
+footer {
+    font-size: .5em;
+    font-family: sans-serif;
+    color: white;
+    font-style: italic;
+    position: fixed;
+    width: 98vw;
+    text-align: center;
+    bottom: 0px;
+    padding: 2vh 2vw;
+    background-color: hsl(44, 39%, 46%);
+    border-radius: 20px 20px 0 0;
+}
+footer img {
+    float:left;
+    padding-left: 3vw;
+    filter: invert(1);
 }
