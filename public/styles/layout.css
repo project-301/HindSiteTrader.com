@@ -19,7 +19,6 @@ div {
     border: 2px inset hsl(44, 79%, 96%);
     border-radius: 10px;
     background-color: hsl(266, 69%, 95%);
-    color: #fff27f;
     color: hsl(266, 69%, 40%);
     padding: 3vh 5vw 0;
     margin-bottom: 1vh;
@@ -32,16 +31,44 @@ footer {
     font-family: sans-serif;
     color: white;
     font-style: italic;
-    position: fixed;
-    width: 98vw;
-    text-align: center;
+    position: sticky;
+    width: auto;
     bottom: 0px;
     padding: 2vh 2vw;
     background-color: hsl(44, 39%, 46%);
     border-radius: 20px 20px 0 0;
 }
 footer img {
-    float:left;
-    padding-left: 3vw;
+    position: absolute;
+    left: 3vw;
     filter: invert(1);
+}
+span {
+    padding: .5em 1em;
+    color: hsl(54, 100%, 75%);
+    background-color: hsla(266, 69%, 40%, 0.5);
+    line-height: 2em;
+    border-radius: 1em;
+}
+
+@media screen and (min-width: 768px){
+    body {
+        padding: 0;
+    }
+    header {
+        position: sticky;
+        left: -1%;
+        border-radius: 0px 0px 20px 0px;
+        margin-bottom: 2vh;
+        width: 50%;
+    }
+    header h1 {
+        order: -1;
+    }
+    div {
+        width: 50%;
+    }
+    footer {
+        position: static;
+    }
 }

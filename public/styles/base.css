@@ -7,6 +7,8 @@ body{
     background-color: hsl(44, 79%, 96%);
     padding: 0 1vw;
     font-family: monospace;
+    min-width: 320px;
+    max-width: 960px;
 }
 
 a {

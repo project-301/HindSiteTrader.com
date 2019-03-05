@@ -21,7 +21,8 @@ function drawChart() {
     },
     options: {
       legend: {
-        display: false
+        display: false,
+        maintainAspectRatio: false
       },
       elements: {
         point: {
