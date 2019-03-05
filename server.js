@@ -14,7 +14,7 @@ require('dotenv').config();
 
 // Application setup
 const app = express();
-const PORT = process.env.PORT || 2001;
+const PORT = process.env.PORT || 3000;
 
 // Express middleware
 // Utilize ExpressJS functionality to parse the body of the request
@@ -36,9 +36,9 @@ app.use(methodOverride((request, response) => {
 */
 
 // Database setup
-const client = new pg.Client(process.env.DATABASE_URL);
-client.connect();
-client.on('error', err => console.log(err));
+// const client = new pg.Client(process.env.DATABASE_URL);
+// client.connect();
+// client.on('error', err => console.log(err));
 
 // Sets the view engine for server-side templating
 app.set('view engine', 'ejs');
@@ -53,7 +53,7 @@ app.get('/', getSearchForm);
 
 // Search result route
 // When user submits a search from index.ejs, renders search results view (/views/pages/result.ejs)
-// app.post('/search-result', getResults);
+app.post('/result', getResults);
 
 
 
@@ -93,6 +93,7 @@ function Regret(data) {
 
   // Call Graph Coordinates constructor?
 
+
 }
 
 // Takes date string "YYYY-MM-DD" and converts to unix timestamp
@@ -110,28 +111,29 @@ function getSearchForm(request, response) {
 }
 
 function getResults(request, response) {
-
+  console.log('fired getResults()');
+  response.render('pages/result');
   /*
   We need to first send a GET request to the AlphaVantage API with the user's company input (a string), and their response returns an array of companys matching that search (including the ticker symbols). 
   Here's an example GET request that searches for the string "microsoft":
   https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=microsoft&datatype=JSON&apikey=ALPHAVANTAGE_API_KEY
   */
 
-  console.log('request body:', request.body);
+  // console.log('request body:', request.body);
 
-  let url = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${request.body.ticker}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
+  // let url = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${request.body.ticker}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
-  superagent.get(url)
-    .then(apiRes => {
-      if (apiRes.body) {
-        return new Regret(apiRes.body);
-      } else {
-        response.render('pages/error');
-        app.use(express.static('./public'));
-      }
-    })
-    .then(results => response.render('pages/result', { company: results }))
-    .catch('err', getError);
+  // superagent.get(url)
+  //   .then(apiRes => {
+  //     if (apiRes.body) {
+  //       return new Regret(apiRes.body);
+  //     } else {
+  //       response.render('pages/error');
+  //       app.use(express.static('./public'));
+  //     }
+  //   })
+  //   .then(results => response.render('pages/result', { company: results }))
+  //   .catch('err', getError);
 
   //   response.render('pages/result');
   //   app.use(express.static('./public'));
@@ -149,7 +151,7 @@ function getResults(request, response) {
 }
 
 function getError(request, response) {
-  console.error(request.body);
+  // console.error(request.body);
   response.render('pages/error');
   app.use(express.static('./public'));
 }

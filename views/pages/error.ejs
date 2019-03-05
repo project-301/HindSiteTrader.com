@@ -1,11 +1,25 @@
+<!-- error.ejs -->
 <!DOCTYPE html>
 <html>
-  <%- include layout/head.ejs %>
-  <body>
-    <%- include layout/header.ejs %>
-    <main>
-      <p>Regrettably, There was an error.</p>
-    </main>
-    <%- include layout/footer.ejs %>
-  </body>
+
+<head>
+  <%- include('../layout/head') %>
+</head>
+
+<body>
+
+  <header>
+    <%- include('../layout/header') %>
+  </header>
+
+  <main>
+    <p>Regrettably, There was an error.</p>
+  </main>
+
+  <footer>
+    <%- include('../layout/footer') %>
+  </footer>
+
+</body>
+
 </html>
