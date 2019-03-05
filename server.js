@@ -152,3 +152,4 @@ function getResults(request, response) {
     response.render('pages/error');
     app.use(express.static('./public'));
   }
+}
