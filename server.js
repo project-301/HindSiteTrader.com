@@ -146,10 +146,10 @@ function getResults(request, response) {
   //   response.render('pages/about');
   //   app.use(express.static('./public'));
   // }
+}
 
-  function getError(request, response) {
-    console.error(request.body);
-    response.render('pages/error');
-    app.use(express.static('./public'));
-  }
+function getError(request, response) {
+  console.error(request.body);
+  response.render('pages/error');
+  app.use(express.static('./public'));
 }
