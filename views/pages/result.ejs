@@ -1,8 +1,11 @@
+<!-- result.ejs -->
 <!DOCTYPE html>
 <html>
 
 <head>
   <%- include('../layout/head') %>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 </head>
 
 <body>
@@ -12,18 +15,23 @@
   </header>
 
   <main>
-    <p>If you invested <span>VARIABLE<%=  %> on <%=  %></span></p>
+    <p>If you invested <span>VARIABLE<%=  %></span> on <span>VARIABLE<%=  %></span></p>
     <p>Your investment would be worth $<span>VARIABLE<%=  %></span></p>
     <p>You would be <span>$ VARIABLE<%= %></span> richer!</p>
     <h2>Your investment in <span>VARIABLE<%=  %></span> over time:</h2>
     <button type="submit">Save to my Regrets</button>
     <p>Rather forget this one?</p>
     <a href="/"><button>Search for a new regret!</button></a>
+
+    <canvas id="chart" ></canvas>
+
   </main>
 
   <footer>
     <%- include('../layout/footer') %>
   </footer>
+  
+  <script src="app.js"></script>
 
 </body>
 
