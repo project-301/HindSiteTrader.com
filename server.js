@@ -8,6 +8,8 @@
 const express = require('express');
 const superagent = require('superagent');
 const pg = require('pg');
+const moment = require('moment'); // moment.js is a library that helps with formatting our dates for the line graph
+moment().format();
 
 // Environment variables
 require('dotenv').config();
@@ -76,30 +78,32 @@ app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
 // Models
 // **************************************************
 
-function Regret(data) {
+function Regret(data, name, symbol) {
   // Maps over 'Monthly Time Series' and creates an array of objects for each month in the format {date: "YYYY-MM-DD", price: ####.##}
-  const monthlyStockPriceArray = Object.entries(data['Monthly Time Series']).map(entry => {
-    return { date: entry[0], price: parseFloat(entry[1]['4. close']) };
-  })
 
-  this.symbol = data['Meta Data']['2. Symbol'];
-  // this.name = ; // TODO: add name from search request
+  const datesArray = Object.keys(data['Monthly Time Series']);
+  const pricesArray = Object.entries(data['Monthly Time Series']).map(value => value[1]['4. close'])
 
-  this.search_date = convertDateToUnix(monthlyStockPriceArray[0].date);
-  this.search_date_price = convertDateToUnix(monthlyStockPriceArray[0].price);
+  this.symbol = symbol;
+  this.name = name; // TODO: add name from search request
 
-  this.past_date = convertDateToUnix(monthlyStockPriceArray.slice(-1)[0].date);
-  this.past_date_price = convertDateToUnix(monthlyStockPriceArray.slice(-1)[0].price);
+  this.search_date = datesArray[0];
+  this.search_date_price = pricesArray[0];
 
-  // Call Graph Coordinates constructor?
+  this.past_date = datesArray.slice(-1)[0];
+  this.past_price = pricesArray.slice(-1)[0];
+  this.investment = 1000; // need to edit here.
 
+  // Graph data. (possibly the place to use Moment.js for date formatting from unix timestamps)
+  this.graph_labels = datesArray.map(date => moment(date).format("MMM YYYY")).toString(); // "labels" is an array containing the x-axis coordinates for our chart.js line graph; so it's an array of dates in the format MMM YYYY.
+  this.graph_data = pricesArray.toString(); // "data" is an array containing the y-axis coordinates for our chart.js line graph; so it's an array of stock prices. Should be EXACTLY the same length as graph_labels in order for our chart to render correctly.
 
 }
 
 // Takes date string "YYYY-MM-DD" and converts to unix timestamp
-Regret.convertDateToUnix = function(dateString) {
-  return new Date(dateString) / 1000;
-}
+// Regret.convertDateToUnix = function(dateString) {
+//   return new Date(dateString) / 1000;
+// }
 
 // **************************************************
 // Helper functions
@@ -113,42 +117,37 @@ function getSearchForm(request, response) {
 function getResults(request, response) {
   console.log('fired getResults()');
   response.render('pages/result');
-  /*
-  We need to first send a GET request to the AlphaVantage API with the user's company input (a string), and their response returns an array of companys matching that search (including the ticker symbols). 
-  Here's an example GET request that searches for the string "microsoft":
-  https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=microsoft&datatype=JSON&apikey=ALPHAVANTAGE_API_KEY
-  */
 
-  // console.log('request body:', request.body);
+  console.log('127 client request.body:', request.body);
+  console.log('128 client request.body.search[1]:', request.body.search[1]);
 
-  // let url = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${request.body.ticker}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
+  let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
-  // superagent.get(url)
-  //   .then(apiRes => {
-  //     if (apiRes.body) {
-  //       return new Regret(apiRes.body);
-  //     } else {
-  //       response.render('pages/error');
-  //       app.use(express.static('./public'));
-  //     }
-  //   })
-  //   .then(results => response.render('pages/result', { company: results }))
-  //   .catch('err', getError);
+  superagent.get(url)
+    .then(apiResponse => {
+      let symbol = apiResponse.body.bestMatches[0]['1. symbol'];
+      let name = apiResponse.body.bestMatches[0]['2. name'];
+      console.log('138 symbol:', symbol);
+      console.log('149 name:', name);
+      let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
-  //   response.render('pages/result');
-  //   app.use(express.static('./public'));
-  // }
-
-  // function getPortfolio(request, response) {
-  //   response.render('pages/portfolio');
-  //   app.use(express.static('./public'));
-  // }
-
-  // function getAbout(request, response) {
-  //   response.render('pages/about');
-  //   app.use(express.static('./public'));
-  // }
+      superagent.get(urlTwo)
+        .then(apiResponseTwo => {
+          // console.log('apiResponseTwo.body:', apiResponseTwo.body);
+          console.log('New Regret:', new Regret(apiResponseTwo.body, name, symbol));
+        })
+    })
 }
+
+// function getPortfolio(request, response) {
+//   response.render('pages/portfolio');
+//   app.use(express.static('./public'));
+// }
+
+// function getAbout(request, response) {
+//   response.render('pages/about');
+//   app.use(express.static('./public'));
+// }
 
 function getError(request, response) {
   // console.error(request.body);
