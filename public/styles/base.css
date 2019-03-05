@@ -1,3 +1,7 @@
+* { box-sizing: border-box; }
+
 body{
-    background-color: rgba(220, 220, 220, 0.596);
+    background-color: hsl(44, 79%, 96%);
+    padding: 0 1vw;
+    font-family: monospace;
 }
