@@ -6,6 +6,9 @@ header h1 {
 img {
     height: 5vh;
 }
+main > img{
+    height: 30vh;
+}
 fieldset{
     font-family: monospace;
     font-size: 3vh;
