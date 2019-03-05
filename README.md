@@ -13,7 +13,7 @@
 For this project we used the following technologies: 
 
 * **Languages:** JavaScript, SQL
-* **Libraries and frameworks:** Node.js, Express, 
+* **Libraries and frameworks:** Node.js, Express, jQuery, Chart.js, Moment.js
 * **Database:** PostgreSQL
 * **Deployment platform:** Heroku
 * **APIs:** [Alpha Vantage](https://www.alphavantage.co/)

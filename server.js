@@ -8,6 +8,8 @@
 const express = require('express');
 const superagent = require('superagent');
 const pg = require('pg');
+const moment = require('moment'); // moment.js is a library that helps with formatting our dates for the line graph
+moment().format();
 
 // Environment variables
 require('dotenv').config();
@@ -78,28 +80,29 @@ app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
 
 function Regret(data) {
   // Maps over 'Monthly Time Series' and creates an array of objects for each month in the format {date: "YYYY-MM-DD", price: ####.##}
-  const monthlyStockPriceArray = Object.entries(data['Monthly Time Series']).map(entry => {
-    return { date: entry[0], price: parseFloat(entry[1]['4. close']) };
-  })
+
+  const datesArray = Object.keys(data['Monthly Time Series']);
+  const pricesArray = Object.entries(data['Monthly Time Series']).map(value => value[1]['4. close'])
 
   this.symbol = data['Meta Data']['2. Symbol'];
   // this.name = ; // TODO: add name from search request
 
-  this.search_date = convertDateToUnix(monthlyStockPriceArray[0].date);
-  this.search_date_price = convertDateToUnix(monthlyStockPriceArray[0].price);
+  this.search_date = datesArray[0];
+  this.search_date_price = pricesArray[0];
 
-  this.past_date = convertDateToUnix(monthlyStockPriceArray.slice(-1)[0].date);
-  this.past_date_price = convertDateToUnix(monthlyStockPriceArray.slice(-1)[0].price);
+  this.past_date = datesArray.slice(-1)[0];
+  this.past_date_price = pricesArray.slice(-1)[0];
 
-  // Call Graph Coordinates constructor?
-
+  // Graph data. (possibly the place to use Moment.js for date formatting from unix timestamps)
+  this.graph_labels = datesArray.map(date => moment(date).format("MMM YYYY")).toString(); // "labels" is an array containing the x-axis coordinates for our chart.js line graph; so it's an array of dates in the format MMM YYYY.
+  this.graph_data = pricesArray.toString(); // "data" is an array containing the y-axis coordinates for our chart.js line graph; so it's an array of stock prices. Should be EXACTLY the same length as graph_labels in order for our chart to render correctly.
 
 }
 
 // Takes date string "YYYY-MM-DD" and converts to unix timestamp
-Regret.convertDateToUnix = function(dateString) {
-  return new Date(dateString) / 1000;
-}
+// Regret.convertDateToUnix = function(dateString) {
+//   return new Date(dateString) / 1000;
+// }
 
 // **************************************************
 // Helper functions
