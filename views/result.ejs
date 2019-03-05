@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <%- include layout/head.ejs %>
+  <body>
+    <%- include layout/header.ejs %>
+    <main>
+      <p>If you invested <%= seed %> on <%= date %></p>
+      <p>Your investment would be worth $<%= return %></p>
+      <p>You would be $<%= profit %> richer!</p>
+      <h2>Your Investment in <%= company %> Over Time:</h2>
+      <button type="submit">Save to my Regrets</button>
+      <p>Rather forget this one?</p>
+      <a href="index.ejs">Search for a new regret!</a>
+    </main>
+    <%- include layout/footer.ejs %>
+  </body>
+</html>
