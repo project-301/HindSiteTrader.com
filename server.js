@@ -132,9 +132,9 @@ function getResults(request, response) {
       let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
       superagent.get(urlTwo)
-        .then(apiResponseTwo => {
-          // console.log('apiResponseTwo.body:', apiResponseTwo.body);
-          console.log('New Regret:', new Regret(apiResponseTwo.body, name, symbol));
+        .then(apiResponseTwo => new Regret(apiResponseTwo.body, name, symbol))
+        .then(regretObj => {
+          response.render('pages/result', { regret: regretObj })
         })
     })
 }
