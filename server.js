@@ -61,7 +61,7 @@ app.post('/result', getResults);
 // Graph data route
 // When result view is rendered, passes graph data to the client-side AJAX request (needed for Chart.js)
 app.get('/graph-data', (request, response) => {
-  response.send({ labels: latestSavedRegretObj.chartLabels, data: latestSavedRegretObj.chartData })
+  response.send({ labels: latestSavedRegretObj.graph_labels, data: latestSavedRegretObj.graph_data })
 });
 
 // "Save Regret" route
@@ -148,9 +148,9 @@ function getResults(request, response) {
       superagent.get(urlTwo) // Send 2nd API request to get the past stock values
         .then(priceData => {
           latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol) // Run response through constructor model
-        })  
+        })
         .then(regret => {
-          console.log('141 regret', regret)
+          console.log('141 regret', latestSavedRegretObj)
           return response.render('pages/result', { regret: latestSavedRegretObj })
         })
     })
@@ -160,7 +160,7 @@ function getResults(request, response) {
 // Saves regret object to SQL portfolio table
 // function saveRegret(request, response) {
 //   console.log('request.body', request.body);
-  // let regret = latestSavedRegretObj
+// let regret = latestSavedRegretObj
 // }
 
 // Callback that gets saved regrets from DB and renders on portfolio.ejs view
