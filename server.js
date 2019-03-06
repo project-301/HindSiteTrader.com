@@ -92,7 +92,9 @@ function Regret(data, name, symbol) {
 
   this.past_date = datesArray.slice(-1)[0];
   this.past_price = pricesArray.slice(-1)[0];
-  this.investment = 1000; // need to edit here.
+  this.investment = 1000; // TODO Replace hard-coded investment amount
+  this.investment_growth = Math.floor(((this.investment / this.past_price) * this.search_date_price) * 100) / 100; // Math.floor(num * 100) / 100 )
+  this.profit = Math.floor(((this.investment_growth - this.investment) * 100) / 100);
 
   // Graph data. (possibly the place to use Moment.js for date formatting from unix timestamps)
   this.graph_labels = datesArray.map(date => moment(date).format("MMM YYYY")).toString(); // "labels" is an array containing the x-axis coordinates for our chart.js line graph; so it's an array of dates in the format MMM YYYY.
@@ -116,10 +118,8 @@ function getSearchForm(request, response) {
 
 function getResults(request, response) {
   console.log('fired getResults()');
-  response.render('pages/result');
-
-  console.log('127 client request.body:', request.body);
-  console.log('128 client request.body.search[1]:', request.body.search[1]);
+  // console.log('127 client request.body:', request.body);
+  // console.log('128 client request.body.search[1]:', request.body.search[1]);
 
   let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
@@ -133,8 +133,9 @@ function getResults(request, response) {
 
       superagent.get(urlTwo)
         .then(apiResponseTwo => new Regret(apiResponseTwo.body, name, symbol))
-        .then(regretObj => {
-          response.render('pages/result', { regret: regretObj })
+        .then(regret => {
+          console.log('137 regret', regret)
+          return response.render('pages/result', { regret: regret })
         })
     })
 }
