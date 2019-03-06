@@ -61,18 +61,18 @@ app.post('/result', getResults);
 // Graph data route
 // When result view is rendered, passes graph data to the client-side AJAX request (needed for Chart.js)
 app.get('/graph-data', (request, response) => {
-  response.send({ labels: chartLabels, data: chartData })
+  response.send({ labels: latestSavedRegretObj.chartLabels, data: latestSavedRegretObj.chartData })
 });
 
 // "Save Regret" route
 // When user clicks "Save to my results" button, update latest Regret object to contain new Regret created in getResults() function
 // THEN insert the Regret object into DB
 // THEN redirect user to portfolio.ejs view
-app.get('/save-regret', saveRegret);
+// app.get('/save-regret', saveRegret);
 
 // Portfolio route
 // When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button), render portfolio view (/views/pages/portfolio.ejs)
-app.get('/portfolio', getPortfolio);
+// app.get('/portfolio', getPortfolio);
 
 // About route
 // When user clicks on "About" link in footer, renders "about us" view (/views/pages/about.ejs)
@@ -100,8 +100,8 @@ function Regret(apiPriceData, investment, name, symbol) {
   const pricesArray = getSimplifiedData(apiPriceData).map(monthData => parseFloat(monthData['adjPrice'].toFixed(2)));
 
   // Fill arrays with data for client-side ajax request (uses Moment.js to reformat dates)
-  chartLabels = datesArray.map(date => moment(date).format('MMM YYYY')).toString(); // x-coordinates
-  chartData = pricesArray.toString(); // y-coordinates
+  latestSavedRegretObj.chartLabels = datesArray.map(date => moment(date).format('MMM YYYY')).toString(); // x-coordinates
+  latestSavedRegretObj.chartData = pricesArray.toString(); // y-coordinates
 
   this.symbol = symbol;
   this.name = name;
@@ -112,8 +112,8 @@ function Regret(apiPriceData, investment, name, symbol) {
   this.investment = investment;
   this.investment_worth = (this.investment / this.past_price) * this.search_date_price;
   this.profit = this.investment_worth - this.investment;
-  this.graph_labels = chartLabels;
-  this.graph_data = chartData;
+  this.graph_labels = latestSavedRegretObj.chartLabels;
+  this.graph_data = latestSavedRegretObj.chartData;
 }
 
 // **************************************************
@@ -146,8 +146,8 @@ function getResults(request, response) {
       let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
       superagent.get(urlTwo) // Send 2nd API request to get the past stock values
-        .then(priceData => new R{
-          latestSavedRegretObj = egret(priceData.body, investment, name, symbol)) // Run response through constructor model
+        .then(priceData => {
+          latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol) // Run response through constructor model
         })  
         .then(regret => {
           console.log('141 regret', regret)
