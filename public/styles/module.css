@@ -28,6 +28,15 @@ input{
     padding: 1px 2px;
     margin-bottom: 2vh;
 }
+.dateclass.placeholderclass::before {
+    width: 100%;
+    content: attr(placeholder);
+  }
+  
+.dateclass.placeholderclass:hover::before {
+    width: 0%;
+    content: "";
+  }
 form > p{
     display: block;
     font-size: 2.5vh;
@@ -50,10 +59,10 @@ button:hover{
 }
 p {
     font-size: 1.2em;
-    margin-bottom: .5em;
+    margin: 0 2vw .7em;
 }
 button+p {
-    margin-top: 5vh;
+    margin-top: 3vh;
     font-size: 1.5em;
 }
 

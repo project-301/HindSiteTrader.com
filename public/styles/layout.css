@@ -19,7 +19,6 @@ div {
     border: 2px inset hsl(44, 79%, 96%);
     border-radius: 10px;
     background-color: hsl(266, 69%, 95%);
-    color: #fff27f;
     color: hsl(266, 69%, 40%);
     padding: 3vh 5vw 0;
     margin-bottom: 1vh;
@@ -33,15 +32,70 @@ footer {
     color: white;
     font-style: italic;
     position: fixed;
-    width: 98vw;
-    text-align: center;
+    width: 100%;
     bottom: 0px;
     padding: 2vh 2vw;
     background-color: hsl(44, 39%, 46%);
     border-radius: 20px 20px 0 0;
 }
-footer img {
-    float:left;
-    padding-left: 3vw;
+footer a:first-of-type {
+    float: left;
+    border: 0px;
+}
+footer a img {
     filter: invert(1);
+    text-decoration: none;
+}
+footer img {
+    filter: invert(1);
+    float: right;
+}
+span {
+    padding: .2em 1em;
+    color: hsl(54, 100%, 75%);
+    background-color: hsla(266, 69%, 40%, 0.5);
+    line-height: 1.9em;
+    border-radius: 1em;
+}
+
+@media screen and (min-width: 733px){
+    body {
+        padding: 0;
+    }
+    header {
+        position: sticky;
+        left: -1%;
+        border-radius: 0px 0px 20px 0px;
+        margin-bottom: 2vh;
+        width: 50%;
+    }
+    header h1 {
+        order: -1;
+    }
+    main section {
+        font-size: 125%;
+        width: 43vw;
+        height: 50vh;
+        padding-bottom: 5vh;
+        float: left;
+    }
+    main div {
+        width: 50vw;
+        height: 50vh;
+        display: inline-block;
+    }
+    main div+button {
+        position: absolute;
+        top: -1vh;
+        right: -1%;
+        font-family: 'Nanum Gothic Coding', monospace;
+        font-size: 170%;
+        padding: 2vh;
+        border-radius: 0px 0px 0px 20px;
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: 960px) {
+    
 }
