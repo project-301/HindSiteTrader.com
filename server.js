@@ -146,9 +146,9 @@ function getResults(request, response) {
       let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
       superagent.get(urlTwo) // Send 2nd API request to get the past stock values
-        .then(priceData => new R{
-          latestSavedRegretObj = egret(priceData.body, investment, name, symbol)) // Run response through constructor model
-        })  
+        .then(priceData => {
+          latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol); // Run response through constructor model
+        }) 
         .then(regret => {
           console.log('141 regret', regret)
           return response.render('pages/result', { regret: latestSavedRegretObj })
@@ -160,7 +160,7 @@ function getResults(request, response) {
 // Saves regret object to SQL portfolio table
 // function saveRegret(request, response) {
 //   console.log('request.body', request.body);
-  // let regret = latestSavedRegretObj
+//   let regret = latestSavedRegretObj
 // }
 
 // Callback that gets saved regrets from DB and renders on portfolio.ejs view
