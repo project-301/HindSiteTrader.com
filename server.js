@@ -92,7 +92,9 @@ function Regret(data, name, symbol) {
 
   this.past_date = datesArray.slice(-1)[0];
   this.past_price = pricesArray.slice(-1)[0];
-  this.investment = 1000; // need to edit here.
+  this.investment = 1000; // TODO Replace hard-coded investment amount
+  this.investment_growth = Math.floor(((this.investment / this.past_price) * this.search_date_price) * 100) / 100; // Math.floor(num * 100) / 100 )
+  this.profit = Math.floor(((this.investment_growth - this.investment) * 100) / 100);
 
   // Graph data. (possibly the place to use Moment.js for date formatting from unix timestamps)
   this.graph_labels = datesArray.map(date => moment(date).format("MMM YYYY")).toString(); // "labels" is an array containing the x-axis coordinates for our chart.js line graph; so it's an array of dates in the format MMM YYYY.

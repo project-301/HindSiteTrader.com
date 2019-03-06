@@ -15,17 +15,15 @@
   </header>
 
   <main>
-   <% var currentInvestment = (regret.investment / regret.past_price) * regret.search_date_price; 
-   var profit = currentInvestment - regret.investment;
-   %>
+
     <section>
       <p>If you invested <span><%= regret.investment  %></span> on <span><%= regret.past_date %></span></p>
-      <p>Your investment would be worth $<span><%= currentInvestment %></span></p>
-      <p>You would be <span>$<%= profit %></span> richer!</p>
+      <p>Your investment would be worth $<span><%= regret.investment_growth %></span></p>
+      <p>You would be <span>$<%= regret.profit %></span> richer!</p>
     </section>
     <div>
         <h2>Your investment in <span><%= regret.name %></span> over time:</h2>
-      <canvas id="chart" ></canvas>
+      <canvas id="chart"></canvas>
     </div>
 
     <button type="submit">Save to my Regrets</button>
