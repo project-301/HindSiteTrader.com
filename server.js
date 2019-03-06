@@ -116,10 +116,8 @@ function getSearchForm(request, response) {
 
 function getResults(request, response) {
   console.log('fired getResults()');
-  response.render('pages/result');
-
-  console.log('127 client request.body:', request.body);
-  console.log('128 client request.body.search[1]:', request.body.search[1]);
+  // console.log('127 client request.body:', request.body);
+  // console.log('128 client request.body.search[1]:', request.body.search[1]);
 
   let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
@@ -133,8 +131,9 @@ function getResults(request, response) {
 
       superagent.get(urlTwo)
         .then(apiResponseTwo => new Regret(apiResponseTwo.body, name, symbol))
-        .then(regretObj => {
-          response.render('pages/result', { regret: regretObj })
+        .then(regret => {
+          console.log('137 regret', regret)
+          return response.render('pages/result', { regret: regret })
         })
     })
 }
