@@ -4,6 +4,7 @@
 
 <head>
   <%- include('../layout/head') %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 </head>
@@ -16,13 +17,13 @@
 
   <main>
     <section>
-      <p>If you invested <span>VARIABLE<%=  %></span> on <span>VARIABLE<%=  %></span></p>
-      <p>Your investment would be worth $<span>VARIABLE<%=  %></span></p>
-      <p>You would be <span>$ VARIABLE<%= %></span> richer!</p>
+      <p>If you invested <span>$<%= parseFloat(regret.investment).toFixed(2)  %></span> on <span><%= regret.past_date %></span></p>
+      <p>Your investment would be worth <span>$<%= parseFloat(regret.investment_worth).toFixed(2) %></span></p>
+      <p>You would be <span>$<%= parseFloat(regret.profit).toFixed(2) %></span> richer!</p>
     </section>
     <div>
-        <h2>Your investment in <span>VARIABLE<%=  %></span> over time:</h2>
-      <canvas id="chart" ></canvas>
+        <h2>Your investment in <span><%= regret.name %></span> over time:</h2>
+      <canvas id="chart"></canvas>
     </div>
 
     <button type="submit">Save to my Regrets</button>
