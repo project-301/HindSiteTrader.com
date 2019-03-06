@@ -42,7 +42,7 @@ function drawChart(xPointsArray, yPointsArray) {
     },
     options: {
       legend: {
-        display: false
+        display: false,
       },
       elements: {
         point: {

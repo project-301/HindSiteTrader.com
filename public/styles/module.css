@@ -6,6 +6,9 @@ header h1 {
 img {
     height: 5vh;
 }
+main > img{
+    height: 30vh;
+}
 fieldset{
     font-family: monospace;
     font-size: 3vh;
@@ -56,10 +59,10 @@ button:hover{
 }
 p {
     font-size: 1.2em;
-    margin-bottom: .5em;
+    margin: 0 2vw .7em;
 }
 button+p {
-    margin-top: 5vh;
+    margin-top: 3vh;
     font-size: 1.5em;
 }
 
