@@ -1,0 +1,17 @@
+* { 
+    box-sizing: border-box; 
+    text-align: center;
+}
+
+body{
+    background-color: hsl(44, 79%, 96%);
+    padding: 0 1vw 13vh;
+    font-family: monospace;
+    min-width: 320px;
+    max-width: 960px;
+    height: 100%;
+}
+
+a {
+    text-decoration: none;
+}

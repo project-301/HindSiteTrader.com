@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <%- include layout/head.ejs %>
-  <body>
-    <%- include layout/header.ejs %>
-    <main>
-      <form>
-        <fieldset>
-          <label>If I invested <input type="number" min="0.01" step="0.01" max="100,000" value="1.23" /></label>
-          <label>In <input type="text" placeholder="AAA" /> Stock,</label>
-          <label>On <input type="date" />,</label>
-        </fieldset>
-        <label>How much richer would I be? 
-          <button type="submit">Find Out!</button></label>
-      </form>
-    </main>
-    <%- include layout/footer.ejs %>
-  </body>
+
+<head>
+  <%- include('layout/head') %>
+</head>
+
+<body>
+
+  <header>
+    <%- include('layout/header') %>
+  </header>
+
+  <main>
+    <form action="/result" method="post">
+      <fieldset>
+        <label>If I invested <input name="search" type="number" min="0.01" step="0.01" max="100,000" value="1.23" /></label>
+        <label>In the Company <input name="search" type="text" placeholder="AAA" /></label>
+        <label>On <input name="search" type="date" /></label>
+      </fieldset>
+      <p>How much richer would I be?</p>
+        <button type="submit">Find Out!</button>
+    </form>
+  </main>
+  <footer>
+      <%- include('layout/footer') %>
+  </footer>
+</body>
+
 </html>
