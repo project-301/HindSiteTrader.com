@@ -61,18 +61,18 @@ app.post('/result', getResults);
 // Graph data route
 // When result view is rendered, passes graph data to the client-side AJAX request (needed for Chart.js)
 app.get('/graph-data', (request, response) => {
-  response.send({ labels: chartLabels, data: chartData })
+  response.send({ labels: latestSavedRegretObj.graph_labels, data: latestSavedRegretObj.graph_data })
 });
 
-// "Save Regret" route
+// TODO "Save Regret" route
 // When user clicks "Save to my results" button, update latest Regret object to contain new Regret created in getResults() function
 // THEN insert the Regret object into DB
 // THEN redirect user to portfolio.ejs view
-app.get('/save-regret', saveRegret);
+// app.get('/save-regret', saveRegret);
 
-// Portfolio route
+// TODO Portfolio route
 // When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button), render portfolio view (/views/pages/portfolio.ejs)
-app.get('/portfolio', getPortfolio);
+// app.get('/portfolio', getPortfolio);
 
 // About route
 // When user clicks on "About" link in footer, renders "about us" view (/views/pages/about.ejs)
@@ -99,10 +99,6 @@ function Regret(apiPriceData, investment, name, symbol) {
   const datesArray = Object.keys(apiPriceData['Monthly Time Series']);
   const pricesArray = Object.entries(apiPriceData['Monthly Time Series']).map(value => value[1]['4. close']);
 
-  // Fill arrays with data for client-side ajax request (uses Moment.js to reformat dates)
-  chartLabels = datesArray.map(date => moment(date).format('MMM YYYY')).toString(); // x-coordinates
-  chartData = pricesArray.toString(); // y-coordinates
-
   this.symbol = symbol;
   this.name = name;
   this.search_date = datesArray[0];
@@ -112,8 +108,10 @@ function Regret(apiPriceData, investment, name, symbol) {
   this.investment = investment;
   this.investment_worth = (this.investment / this.past_price) * this.search_date_price;
   this.profit = this.investment_worth - this.investment;
-  this.graph_labels = chartLabels;
-  this.graph_data = chartData;
+  
+  // Fill arrays with data for client-side ajax request (uses Moment.js to reformat dates)
+  this.graph_labels = datesArray.map(date => moment(date).format('MMM YYYY')).toString(); // x-coordinates
+  this.graph_data = pricesArray.toString(); // y-coordinates
 }
 
 // **************************************************
@@ -156,14 +154,14 @@ function getResults(request, response) {
     })
 }
 
-// Callback that fires when user clicks "Save to my regrets" button
+// TODO Callback that fires when user clicks "Save to my regrets" button
 // Saves regret object to SQL portfolio table
 // function saveRegret(request, response) {
 //   console.log('request.body', request.body);
 //   let regret = latestSavedRegretObj
 // }
 
-// Callback that gets saved regrets from DB and renders on portfolio.ejs view
+// TODO Callback that gets saved regrets from DB and renders on portfolio.ejs view
 // function getPortfolio(request, response) {
 
 //   const SQL =`SELECT * FROM portfolio;`;
@@ -172,6 +170,7 @@ function getResults(request, response) {
 //    app.use(express.static('./public'));
 // }
 
+// TODO Render "About Us" view
 // function getAbout(request, response) {
 //   response.render('pages/about');
 //   app.use(express.static('./public'));
