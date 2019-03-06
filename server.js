@@ -88,9 +88,9 @@ app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
 let chartLabels = [];
 let chartData = [];
 
-function Regret(apiData, investment, name, symbol) {
-  const datesArray = Object.keys(apiData['Monthly Time Series']);
-  const pricesArray = Object.entries(apiData['Monthly Time Series']).map(value => value[1]['4. close'])
+function Regret(apiPriceData, investment, name, symbol) {
+  const datesArray = Object.keys(apiPriceData['Monthly Time Series']);
+  const pricesArray = Object.entries(apiPriceData['Monthly Time Series']).map(value => value[1]['4. close']);
 
   // Fill arrays with data for client-side ajax request (uses Moment.js to reformat dates)
   chartLabels = datesArray.map(date => moment(date).format('MMM YYYY')).toString(); // x-coordinates
@@ -129,9 +129,9 @@ function getResults(request, response) {
   let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
   superagent.get(url) // Send 1st API request
-    .then(apiResponse => {
-      let symbol = apiResponse.body.bestMatches[0]['1. symbol'];
-      let name = apiResponse.body.bestMatches[0]['2. name'];
+    .then(symbolSearchResults => {
+      let symbol = symbolSearchResults.body.bestMatches[0]['1. symbol'];
+      let name = symbolSearchResults.body.bestMatches[0]['2. name'];
       console.log('132 symbol:', symbol);
       console.log('133 name:', name);
 
@@ -139,7 +139,7 @@ function getResults(request, response) {
       let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
       superagent.get(urlTwo) // Send 2nd API request to get the past stock values
-        .then(apiResponseTwo => new Regret(apiResponseTwo.body, investment, name, symbol)) // Run response through constructor model
+        .then(priceData => new Regret(priceData.body, investment, name, symbol)) // Run response through constructor model
         .then(regret => {
           console.log('141 regret', regret)
           return response.render('pages/result', { regret: regret })
