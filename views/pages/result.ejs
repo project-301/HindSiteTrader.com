@@ -19,7 +19,11 @@
     <section>
       <p>If you invested <span>$<%= parseFloat(regret.investment).toFixed(2)  %></span> on <span><%= regret.past_date %></span></p>
       <p>Your investment would be worth <span>$<%= parseFloat(regret.investment_worth).toFixed(2) %></span></p>
+      <% if (parseFloat(regret.profit) >= 0) { %>
       <p>You would be <span>$<%= parseFloat(regret.profit).toFixed(2) %></span> richer!</p>
+      <% } else { %>
+      <p>You would be <span>$<%= Math.abs(parseFloat(regret.profit)).toFixed(2) %></span> poorer! Good for you!</p>
+      <% } %>
     </section>
     <div>
         <h2>Your investment in <span><%= regret.name %></span> over time:</h2>
