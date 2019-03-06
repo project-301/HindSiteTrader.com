@@ -31,14 +31,8 @@ footer {
     font-family: sans-serif;
     color: white;
     font-style: italic;
-<<<<<<< HEAD
-    position: sticky;
-    width: 98vw;
-    text-align: center;
-=======
     position: fixed;
     width: 100%;
->>>>>>> development
     bottom: 0px;
     padding: 2vh 2vw;
     background-color: hsl(44, 39%, 46%);
