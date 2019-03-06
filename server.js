@@ -148,7 +148,7 @@ function getResults(request, response) {
           latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol); // Run response through constructor model
         }) 
         .then(regret => {
-          console.log('141 regret', regret)
+          console.log('141 latestSavedRegretObj', latestSavedRegretObj)
           return response.render('pages/result', { regret: latestSavedRegretObj })
         })
     })
