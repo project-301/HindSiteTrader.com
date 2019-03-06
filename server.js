@@ -72,7 +72,7 @@ app.post('/save-regret', saveRegret);
 
 // TODO Portfolio route
 // When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button), render portfolio view (/views/pages/portfolio.ejs)
-app.get('/portfolio', getPortfolio);
+// app.get('/portfolio', getPortfolio);
 
 // About route
 // When user clicks on "About" link in footer, renders "about us" view (/views/pages/about.ejs)
@@ -96,8 +96,8 @@ app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
 let latestSavedRegretObj = {}; // Will temporarily store whole regret object created in getResults() function
 
 function Regret(apiPriceData, investment, name, symbol) {
-  const datesArray = Object.keys(apiPriceData['Monthly Time Series']);
-  const pricesArray = Object.entries(apiPriceData['Monthly Time Series']).map(value => value[1]['4. close']);
+  const datesArray = getSimplifiedData(apiPriceData).map(monthData => monthData['date']);
+  const pricesArray = getSimplifiedData(apiPriceData).map(monthData => parseFloat(monthData['adjPrice'].toFixed(2)));
 
   this.symbol = symbol;
   this.name = name;
@@ -137,18 +137,18 @@ function getResults(request, response) {
     .then(symbolSearchResults => {
       let symbol = symbolSearchResults.body.bestMatches[0]['1. symbol'];
       let name = symbolSearchResults.body.bestMatches[0]['2. name'];
-      console.log('132 symbol:', symbol);
-      console.log('133 name:', name);
+      console.log('140 symbol:', symbol);
+      console.log('141 name:', name);
 
       // Creates url for 2nd API request, using symbol from 1st request
-      let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
+      let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
       superagent.get(urlTwo) // Send 2nd API request to get the past stock values
         .then(priceData => {
           latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol); // Run response through constructor model
-        }) 
+        })
         .then(regret => {
-          console.log('141 latestSavedRegretObj', latestSavedRegretObj)
+          console.log('151 latestSavedRegretObj', latestSavedRegretObj)
           return response.render('pages/result', { regret: latestSavedRegretObj })
         })
     })
@@ -157,34 +157,68 @@ function getResults(request, response) {
 // TODO Callback to save regret object to SQL portfolio table
 // Fires when user clicks "Save to my regrets" button
 function saveRegret(request, response) {
-  console.log('request.body in saveRegret()', request.body);
+  console.log('saveRegret() function entered');
+  console.log('161 latestSavedRegretObj:', latestSavedRegretObj);
 
-  let {symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data} = request.body;
+  let { symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data } = Object.keys(latestSavedRegretObj);
 
   let SQL = `INSERT INTO portfolio(symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`;
 
   // TODO Create variable to hold values
   let values = [symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data];
+  console.log('169 values:', values);
 
   return client.query(SQL, values)
-    .then(response.redirect('/portfolio'))
+  //   .then(response.redirect('/portfolio'))
     .catch(err => getError(err, response));
 }
 
 // TODO Callback that gets saved regrets from DB and renders on portfolio.ejs view
-function getPortfolio(request, response) {
-  let SQL = 'SELECT * FROM portfolio;';
+// function getPortfolio(request, response) {
+//   let SQL = 'SELECT * FROM portfolio;';
 
-  return client.query(SQL)
-    .then(results => response.render('pages/portfolio', {results: results.rows}))
-    .catch(getError);
-}
+//   return client.query(SQL)
+//     .then(results => response.render('pages/portfolio', {results: results.rows}))
+//     .catch(getError);
+// }
 
 // TODO Render "About Us" view
 // function getAbout(request, response) {
 //   response.render('pages/about');
 //   app.use(express.static('./public'));
 // }
+
+// Function to go through daily stock data from API, account for any stock split events, and return a simplified array for the close of each month
+function getSimplifiedData(json) {
+  let splitCo = 1;
+
+  let simplifiedArray = Object.entries(json['Time Series (Daily)']).map(value => {
+    let newObj = { date: value[0], price: value[1]['4. close'], split: value[1]['8. split coefficient'] };
+    return newObj;
+  }).reverse();
+
+  let splitAdjDailyPricesArray = simplifiedArray.map(value => {
+    splitCo *= parseFloat(value['split'])
+    let adjPrice = parseFloat(value['price']) * splitCo;
+    return { date: value['date'], originalPrice: value['price'], splitCo: splitCo, adjPrice: adjPrice }
+  })
+
+  let month = '';
+  let filterMonthly = splitAdjDailyPricesArray.filter((day, idx) => {
+    if (idx < splitAdjDailyPricesArray.length - 1) {
+      month = splitAdjDailyPricesArray[idx + 1]['date'].slice(0, 7);
+    } else {
+      return true;
+    }
+    if (day['date'].slice(0, 7) !== month) {
+      return true;
+    } else {
+      return false;
+    }
+  })
+
+  return filterMonthly;
+}
 
 function getError(request, response) {
   // console.error(request.body);
