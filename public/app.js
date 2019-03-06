@@ -15,8 +15,8 @@ $(document).ready(function () { // Runs on page load
   })
 
     .then(serverResponse => { // the response from server.js is an object with two keys: data and labels
-      let chartDataArray = serverResponse.data.split(',').reverse().map(value => parseFloat(value));
-      let chartLabelsArray = serverResponse.labels.split(',').reverse();
+      let chartDataArray = serverResponse.data.split(',').map(value => parseFloat(value));
+      let chartLabelsArray = serverResponse.labels.split(',');
       drawChart(chartLabelsArray, chartDataArray); // draws the chart with the server response data
     })
 
