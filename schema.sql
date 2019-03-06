@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS portfolio (
 INSERT INTO portfolio (symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data) VALUES ('MSFT', 
 'Microsoft Corporation', 
 888537600, 
-112.26, 
+112.26,   
 84.75, 
 1551657600, 
 1000, 

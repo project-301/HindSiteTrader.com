@@ -39,9 +39,9 @@ app.use(methodOverride((request, response) => {
 */
 
 // Database setup
-// const client = new pg.Client(process.env.DATABASE_URL);
-// client.connect();
-// client.on('error', err => console.log(err));
+const client = new pg.Client(process.env.DATABASE_URL);
+client.connect();
+client.on('error', err => console.log(err));
 
 // Sets the view engine for server-side templating
 app.set('view engine', 'ejs');
@@ -68,11 +68,11 @@ app.get('/graph-data', (request, response) => {
 // When user clicks "Save to my results" button, update latest Regret object to contain new Regret created in getResults() function
 // THEN insert the Regret object into DB
 // THEN redirect user to portfolio.ejs view
-// app.get('/save-regret', saveRegret);
+app.post('/save-regret', saveRegret);
 
 // TODO Portfolio route
 // When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button), render portfolio view (/views/pages/portfolio.ejs)
-// app.get('/portfolio', getPortfolio);
+app.get('/portfolio', getPortfolio);
 
 // About route
 // When user clicks on "About" link in footer, renders "about us" view (/views/pages/about.ejs)
@@ -108,7 +108,7 @@ function Regret(apiPriceData, investment, name, symbol) {
   this.investment = investment;
   this.investment_worth = (this.investment / this.past_price) * this.search_date_price;
   this.profit = this.investment_worth - this.investment;
-  
+
   // Fill arrays with data for client-side ajax request (uses Moment.js to reformat dates)
   this.graph_labels = datesArray.map(date => moment(date).format('MMM YYYY')).toString(); // x-coordinates
   this.graph_data = pricesArray.toString(); // y-coordinates
@@ -154,21 +154,31 @@ function getResults(request, response) {
     })
 }
 
-// TODO Callback that fires when user clicks "Save to my regrets" button
-// Saves regret object to SQL portfolio table
-// function saveRegret(request, response) {
-//   console.log('request.body', request.body);
-//   let regret = latestSavedRegretObj
-// }
+// TODO Callback to save regret object to SQL portfolio table
+// Fires when user clicks "Save to my regrets" button
+function saveRegret(request, response) {
+  console.log('request.body in saveRegret()', request.body);
+
+  let {symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data} = request.body;
+
+  let SQL = `INSERT INTO portfolio(symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`;
+
+  // TODO Create variable to hold values
+  let values = [symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data];
+
+  return client.query(SQL, values)
+    .then(response.redirect('/portfolio'))
+    .catch(err => getError(err, response));
+}
 
 // TODO Callback that gets saved regrets from DB and renders on portfolio.ejs view
-// function getPortfolio(request, response) {
+function getPortfolio(request, response) {
+  let SQL = 'SELECT * FROM portfolio;';
 
-//   const SQL =`SELECT * FROM portfolio;`;
-//   const value=
-//    response.render('pages/portfolio');
-//    app.use(express.static('./public'));
-// }
+  return client.query(SQL)
+    .then(results => response.render('pages/portfolio', {results: results.rows}))
+    .catch(getError);
+}
 
 // TODO Render "About Us" view
 // function getAbout(request, response) {
