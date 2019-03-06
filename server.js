@@ -89,8 +89,8 @@ let chartLabels = [];
 let chartData = [];
 
 function Regret(apiPriceData, investment, name, symbol) {
-  const datesArray = Object.keys(apiPriceData['Monthly Time Series']);
-  const pricesArray = Object.entries(apiPriceData['Monthly Time Series']).map(value => value[1]['4. close']);
+  const datesArray = getSimplifiedData(apiPriceData).map(monthData => monthData['date']);
+  const pricesArray = getSimplifiedData(apiPriceData).map(monthData => parseFloat(monthData['adjPrice'].toFixed(2)));
 
   // Fill arrays with data for client-side ajax request (uses Moment.js to reformat dates)
   chartLabels = datesArray.map(date => moment(date).format('MMM YYYY')).toString(); // x-coordinates
@@ -136,7 +136,7 @@ function getResults(request, response) {
       console.log('133 name:', name);
 
       // Creates url for 2nd API request, using symbol from 1st request
-      let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
+      let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
       superagent.get(urlTwo) // Send 2nd API request to get the past stock values
         .then(priceData => new Regret(priceData.body, investment, name, symbol)) // Run response through constructor model
@@ -156,6 +156,38 @@ function getResults(request, response) {
 //   response.render('pages/about');
 //   app.use(express.static('./public'));
 // }
+
+// Function to go through daily stock data from API, account for any stock split events, and return a simplified array for the close of each month
+function getSimplifiedData(json) {
+  let splitCo = 1;
+
+  let simplifiedArray = Object.entries(json['Time Series (Daily)']).map(value => {
+    let newObj = { date: value[0], price: value[1]['4. close'], split: value[1]['8. split coefficient'] };
+    return newObj;
+  }).reverse();
+
+  let splitAdjDailyPricesArray = simplifiedArray.map(value => {
+    splitCo *= parseFloat(value['split'])
+    let adjPrice = parseFloat(value['price']) * splitCo;
+    return { date: value['date'], originalPrice: value['price'], splitCo: splitCo, adjPrice: adjPrice }
+  })
+
+  let month = '';
+  let filterMonthly = splitAdjDailyPricesArray.filter((day, idx) => {
+    if (idx < splitAdjDailyPricesArray.length - 1) {
+      month = splitAdjDailyPricesArray[idx + 1]['date'].slice(0, 7);
+    } else {
+      return true;
+    }
+    if (day['date'].slice(0, 7) !== month) {
+      return true;
+    } else {
+      return false;
+    }
+  })
+
+  return filterMonthly;
+}
 
 function getError(request, response) {
   // console.error(request.body);
