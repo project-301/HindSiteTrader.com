@@ -8,7 +8,8 @@
 const express = require('express');
 const superagent = require('superagent');
 const pg = require('pg');
-const moment = require('moment'); // moment.js is a library that helps with formatting our dates for the line graph
+// moment.js helps with formatting dates for the line graph
+const moment = require('moment');
 moment().format();
 
 // Environment variables
@@ -57,7 +58,11 @@ app.get('/', getSearchForm);
 // When user submits a search from index.ejs, renders search results view (/views/pages/result.ejs)
 app.post('/result', getResults);
 
-
+// Graph data route
+// When result view is rendered, passes graph data to the client-side AJAX request (needed for Chart.js)
+app.get('/graph-data', (request, response) => {
+  response.send({ labels: chartLabels, data: chartData })
+});
 
 // Portfolio route
 // When user clicks on portfolio icon in header, renders portfolio view (/views/pages/portfolio.ejs)
@@ -68,7 +73,7 @@ app.post('/result', getResults);
 // app.get('/about', getAbout)
 
 // Error route / catch-all route
-// When user navigates to any url other than the routes above, renders the error view (/views/pages/error.ejs)
+// Renders the error view (/views/pages/error.ejs)
 app.get('*', getError);
 
 // Make sure server is listening for requests ("flips the switch" to turn the server "on")
@@ -78,63 +83,65 @@ app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
 // Models
 // **************************************************
 
-function Regret(data, name, symbol) {
-  // Maps over 'Monthly Time Series' and creates an array of objects for each month in the format {date: "YYYY-MM-DD", price: ####.##}
+// Arrays to hold chart data that will be passed to the client-side app.js
+// Note that these will be reset each time a Regret instance is constructed
+let chartLabels = [];
+let chartData = [];
 
-  const datesArray = Object.keys(data['Monthly Time Series']);
-  const pricesArray = Object.entries(data['Monthly Time Series']).map(value => value[1]['4. close'])
+function Regret(apiData, investment, name, symbol) {
+  const datesArray = Object.keys(apiData['Monthly Time Series']);
+  const pricesArray = Object.entries(apiData['Monthly Time Series']).map(value => value[1]['4. close'])
+
+  // Fill arrays with data for client-side ajax request (uses Moment.js to reformat dates)
+  chartLabels = datesArray.map(date => moment(date).format('MMM YYYY')).toString(); // x-coordinates
+  chartData = pricesArray.toString(); // y-coordinates
 
   this.symbol = symbol;
-  this.name = name; // TODO: add name from search request
-
+  this.name = name;
   this.search_date = datesArray[0];
   this.search_date_price = pricesArray[0];
-
   this.past_date = datesArray.slice(-1)[0];
   this.past_price = pricesArray.slice(-1)[0];
-  this.investment = 1000; // TODO Replace hard-coded investment amount
-  this.investment_growth = Math.floor(((this.investment / this.past_price) * this.search_date_price) * 100) / 100; // Math.floor(num * 100) / 100 )
-  this.profit = Math.floor(((this.investment_growth - this.investment) * 100) / 100);
-
-  // Graph data. (possibly the place to use Moment.js for date formatting from unix timestamps)
-  this.graph_labels = datesArray.map(date => moment(date).format("MMM YYYY")).toString(); // "labels" is an array containing the x-axis coordinates for our chart.js line graph; so it's an array of dates in the format MMM YYYY.
-  this.graph_data = pricesArray.toString(); // "data" is an array containing the y-axis coordinates for our chart.js line graph; so it's an array of stock prices. Should be EXACTLY the same length as graph_labels in order for our chart to render correctly.
-
+  this.investment = investment;
+  this.investment_worth = (this.investment / this.past_price) * this.search_date_price;
+  this.profit = this.investment_worth - this.investment;
+  this.graph_labels = chartLabels;
+  this.graph_data = chartData;
 }
-
-// Takes date string "YYYY-MM-DD" and converts to unix timestamp
-// Regret.convertDateToUnix = function(dateString) {
-//   return new Date(dateString) / 1000;
-// }
 
 // **************************************************
 // Helper functions
 // **************************************************
 
+// Renders index.ejs view at base url
 function getSearchForm(request, response) {
   response.render('index');
   app.use(express.static('./public'));
 }
 
+// Renders pages/result.ejs view on submit
 function getResults(request, response) {
   console.log('fired getResults()');
-  // console.log('127 client request.body:', request.body);
-  // console.log('128 client request.body.search[1]:', request.body.search[1]);
+  let investment = request.body.search[0];
 
+  // Creates url for 1st API request
+  // Takes string typed out by user, returns search results (and symbols)
   let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
-  superagent.get(url)
+  superagent.get(url) // Send 1st API request
     .then(apiResponse => {
       let symbol = apiResponse.body.bestMatches[0]['1. symbol'];
       let name = apiResponse.body.bestMatches[0]['2. name'];
-      console.log('138 symbol:', symbol);
-      console.log('149 name:', name);
+      console.log('132 symbol:', symbol);
+      console.log('133 name:', name);
+
+      // Creates url for 2nd API request, using symbol from 1st request
       let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
-      superagent.get(urlTwo)
-        .then(apiResponseTwo => new Regret(apiResponseTwo.body, name, symbol))
+      superagent.get(urlTwo) // Send 2nd API request to get the past stock values
+        .then(apiResponseTwo => new Regret(apiResponseTwo.body, investment, name, symbol)) // Run response through constructor model
         .then(regret => {
-          console.log('137 regret', regret)
+          console.log('141 regret', regret)
           return response.render('pages/result', { regret: regret })
         })
     })
