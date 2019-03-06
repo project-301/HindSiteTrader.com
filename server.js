@@ -64,9 +64,15 @@ app.get('/graph-data', (request, response) => {
   response.send({ labels: chartLabels, data: chartData })
 });
 
+// "Save Regret" route
+// When user clicks "Save to my results" button, update latest Regret object to contain new Regret created in getResults() function
+// THEN insert the Regret object into DB
+// THEN redirect user to portfolio.ejs view
+app.get('/save-regret', saveRegret);
+
 // Portfolio route
-// When user clicks on portfolio icon in header, renders portfolio view (/views/pages/portfolio.ejs)
-// app.get('/portfolio', getPortfolio);
+// When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button), render portfolio view (/views/pages/portfolio.ejs)
+app.get('/portfolio', getPortfolio);
 
 // About route
 // When user clicks on "About" link in footer, renders "about us" view (/views/pages/about.ejs)
@@ -85,8 +91,9 @@ app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
 
 // Arrays to hold chart data that will be passed to the client-side app.js
 // Note that these will be reset each time a Regret instance is constructed
-let chartLabels = [];
-let chartData = [];
+// let chartLabels = [];
+// let chartData = [];
+let latestSavedRegretObj = {}; // Will temporarily store whole regret object created in getResults() function
 
 function Regret(apiPriceData, investment, name, symbol) {
   const datesArray = Object.keys(apiPriceData['Monthly Time Series']);
@@ -139,17 +146,30 @@ function getResults(request, response) {
       let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
       superagent.get(urlTwo) // Send 2nd API request to get the past stock values
-        .then(priceData => new Regret(priceData.body, investment, name, symbol)) // Run response through constructor model
+        .then(priceData => new R{
+          latestSavedRegretObj = egret(priceData.body, investment, name, symbol)) // Run response through constructor model
+        })  
         .then(regret => {
           console.log('141 regret', regret)
-          return response.render('pages/result', { regret: regret })
+          return response.render('pages/result', { regret: latestSavedRegretObj })
         })
     })
 }
 
+// Callback that fires when user clicks "Save to my regrets" button
+// Saves regret object to SQL portfolio table
+// function saveRegret(request, response) {
+//   console.log('request.body', request.body);
+  // let regret = latestSavedRegretObj
+// }
+
+// Callback that gets saved regrets from DB and renders on portfolio.ejs view
 // function getPortfolio(request, response) {
-//   response.render('pages/portfolio');
-//   app.use(express.static('./public'));
+
+//   const SQL =`SELECT * FROM portfolio;`;
+//   const value=
+//    response.render('pages/portfolio');
+//    app.use(express.static('./public'));
 // }
 
 // function getAbout(request, response) {
