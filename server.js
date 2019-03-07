@@ -26,8 +26,8 @@ app.use(express.urlencoded({ extended: true }));
 // Specify a directory for static resources
 app.use(express.static('./public'));
 
-// TODO: Middleware to handle PUT and DELETE
-// Class demo code below from seattle-301d44/13-update-delete/demos/todo-app/server.js:
+// Middleware to handle PUT and DELETE
+// Modelled on demo code in seattle-301d44/13-update-delete/demos/todo-app/server.js:
 app.use(methodOverride((request, response) => {
   if (request.body && typeof request.body === 'object' && '_method' in request.body) {
     // look in urlencoded POST bodies and delete it
@@ -72,6 +72,9 @@ app.post('/save-regret', saveRegret);
 // TODO Portfolio route
 // When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button), render portfolio view (/views/pages/portfolio.ejs)
 app.get('/portfolio', getPortfolio);
+
+// Route for deleting a regret
+app.put('/delete/:regret_id', deleteRegret);
 
 // About route
 // When user clicks on "About" link in footer, renders "about us" view (/views/pages/about.ejs)
@@ -174,7 +177,9 @@ function saveRegret(request, response) {
   // console.log('173:', result);
     // })
     .catch(error => {
-      request.error = error
+      console.log('180 error caught');
+      request.error = error;
+      console.log('request.error', request.error);
       getError(request, response)
     });
 }
@@ -202,11 +207,42 @@ function deleteRegret(request, response) {
   console.log('deleteRegret function entered');
 
   // SQL query to delete row from table
+  let SQL = `DELETE FROM portfolio WHERE id=$1;`
 
   // Logic to hide/remove deleted regret from view
-    // Need to add class attribute to the deleted regret so we can hide it with JS or CSS?
+  // Need to add class attribute to the deleted regret so we can hide it with JS or CSS? OR just rerender view after regret has been deleted?
 
-} 
+  client.query(SQL) // NEED to return this or not?
+    .then(response.redirect(`/portfolio`)) // OR re-render? ALSO, verify this route?
+    .catch(error => {
+      console.log('216 error caught');
+      request.error = error;
+      console.log('request.error', request.error);
+      getError(request, response);
+    });
+}
+
+///////////////////////////////////////////////////////////////
+// FROM TO-DO APP DEMO FOR LAB 13
+/*
+// Route
+app.put('/update/:task_id', updateTask);
+
+// Callback
+function updateTask(request, response) {
+  // destructure variables
+  let { title, description, category, contact, status } = request.body;
+  // need SQL to update the specific task that we were on
+  let SQL = `UPDATE tasks SET title=$1, description=$2, category=$3, contact=$4, status=$5 WHERE id=$6;`;
+  // use request.params.task_id === whatever task we were on
+  let values = [title, description, category, contact, status, request.params.task_id];
+
+  client.query(SQL, values)
+    .then(response.redirect(`/tasks/${request.params.task_id}`))
+    .catch(err => handleError(err, response));
+}
+*/
+////////////////////////////////////////////////////////////////
 
 // TODO Render "About Us" view
 // function getAbout(request, response) {
