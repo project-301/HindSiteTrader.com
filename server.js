@@ -17,7 +17,7 @@ require('dotenv').config();
 
 // Application setup
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 2517;
 
 // Express middleware
 // Utilize ExpressJS functionality to parse the body of the request
@@ -39,7 +39,7 @@ app.use(methodOverride((request, response) => {
 */
 
 // Database setup
-const client = new pg.Client(process.env.DATABASE_URL);
+const client = new pg.Client('postgres://hcoggers:1907@localhost:5432/hindsite_trader');
 client.connect();
 client.on('error', err => console.log(err));
 
@@ -131,7 +131,7 @@ function getResults(request, response) {
 
   // Creates url for 1st API request
   // Takes string typed out by user, returns search results (and symbols)
-  let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
+let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=ROZ0R6YYUONM8BQT`;
 
   superagent.get(url) // Send 1st API request
     .then(symbolSearchResults => {
@@ -142,7 +142,7 @@ function getResults(request, response) {
       console.log('141 name:', name);
 
       // Creates url for 2nd API request, using symbol from 1st request
-      let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
+      let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=full&apikey=ROZ0R6YYUONM8BQT`;
 
       superagent.get(urlTwo) // Send 2nd API request to get the past stock values
         .then(priceData => {
