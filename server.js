@@ -8,6 +8,7 @@
 const express = require('express');
 const superagent = require('superagent');
 const pg = require('pg');
+const methodOverride = require('method-override');
 // moment.js helps with formatting dates for the line graph
 const moment = require('moment');
 moment().format();
@@ -25,9 +26,8 @@ app.use(express.urlencoded({ extended: true }));
 // Specify a directory for static resources
 app.use(express.static('./public'));
 
-// TODO: Middleware to handle PUT and DELETE
-// Class demo code below from seattle-301d44/13-update-delete/demos/todo-app/server.js:
-/*
+// Middleware to handle PUT and DELETE
+// Modelled on demo code in seattle-301d44/13-update-delete/demos/todo-app/server.js:
 app.use(methodOverride((request, response) => {
   if (request.body && typeof request.body === 'object' && '_method' in request.body) {
     // look in urlencoded POST bodies and delete it
@@ -36,12 +36,11 @@ app.use(methodOverride((request, response) => {
     return method;
   }
 }))
-*/
 
 // Database setup
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect();
-client.on('error', err => console.log(err));
+client.on('error', err => console.log('44 error', err));
 
 // Sets the view engine for server-side templating
 app.set('view engine', 'ejs');
@@ -71,10 +70,13 @@ app.get('/graph-data', (request, response) => {
 app.post('/save-regret', saveRegret);
 
 // TODO Portfolio route
-// When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button), render portfolio view (/views/pages/portfolio.ejs)
+// When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button?), render portfolio view (/views/pages/portfolio.ejs)
 app.get('/portfolio', getPortfolio);
 
-// About route
+// Route for deleting a regret
+app.get('/delete/:regret_id', deleteRegret);
+
+// About Us route
 // When user clicks on "About" link in footer, renders "about us" view (/views/pages/about.ejs)
 // app.get('/about', getAbout)
 
@@ -89,11 +91,9 @@ app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
 // Models
 // **************************************************
 
-// Arrays to hold chart data that will be passed to the client-side app.js
-// Note that these will be reset each time a Regret instance is constructed
-// let chartLabels = [];
-// let chartData = [];
-let latestSavedRegretObj = {}; // Will temporarily store whole regret object created in getResults() function
+// Object that includes arrays of chart data to be passed to client-side app.js 
+// Gets reset each time a Regret instance is constructed
+let latestSavedRegretObj = {};
 
 function Regret(apiPriceData, investment, name, symbol) {
   const datesArray = getSimplifiedData(apiPriceData).map(monthData => monthData['date']);
@@ -169,32 +169,74 @@ function saveRegret(request, response) {
   // TODO Create variable to hold values
   let values = [symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data];
   console.log('169 values:', values);
-
+ 
   return client.query(SQL, values)
     .then(() => response.redirect('/portfolio'))
   // console.log('173:', result);
     // })
     .catch(error => {
-      request.error = error
+      console.log('180 error caught');
+      request.error = error;
       getError(request, response)
     });
 }
 
 // TODO Callback that gets saved regrets from DB and renders on portfolio.ejs view
 function getPortfolio(request, response) {
-  let SQL = 'SELECT * FROM portfolio;';
+  console.log('getPortfolio function entered')
+  let SQL = 'SELECT * FROM portfolio;'; // NEED to filter out some columns for rendering?
 
   return client.query(SQL)
     .then(result => {
-      console.log('185 results:', result.rows)
+      // console.log('185 results:', result.rows)
       response.render('pages/portfolio', {regret: result.rows})
     })
     .catch(error => {
+      console.log('193 error caught');
       request.error = error;
       getError(request, response);
     });
 }
 
+// TODO Function to delete a saved regret from portfolio
+function deleteRegret(request, response) {
+  console.log('deleteRegret function entered');
+
+  // TODO Need to create variable that's assigned id from request.body ?
+
+  let SQL = `DELETE FROM portfolio WHERE id=$1;`;
+  let values = [request.params.regret_id];
+
+  client.query(SQL, values) // NEED to return this or not?
+    .then(response.redirect('/portfolio')) // OR re-render? ALSO, verify this route?
+    .catch(error => {
+      console.log('216 error caught');
+      request.error = error;
+      getError(request, response);
+    });
+}
+
+///////////////////////////////////////////////////////////////
+// FROM TO-DO APP DEMO FOR LAB 13
+/*
+// Route
+app.put('/update/:task_id', updateTask);
+
+// Callback
+function updateTask(request, response) {
+  // destructure variables
+  let { title, description, category, contact, status } = request.body;
+  // need SQL to update the specific task that we were on
+  let SQL = `UPDATE tasks SET title=$1, description=$2, category=$3, contact=$4, status=$5 WHERE id=$6;`;
+  // use request.params.task_id === whatever task we were on
+  let values = [title, description, category, contact, status, request.params.task_id];
+
+  client.query(SQL, values)
+    .then(response.redirect(`/tasks/${request.params.task_id}`))
+    .catch(err => handleError(err, response));
+}
+*/
+////////////////////////////////////////////////////////////////
 
 // TODO Render "About Us" view
 // function getAbout(request, response) {
@@ -235,6 +277,6 @@ function getSimplifiedData(json) {
 }
 
 function getError(request, response) {
-  console.error(request.error);
+  console.error('From error handler: request.error', request.error);
   response.render('pages/error');
 }

@@ -14,160 +14,47 @@
   </header>
 
   <main id="main" class="portfolio">
-    <!-- <p>You have No regrets</p> -->
     <h2 id="portfolio-title">Your Regret Portfolio</h2>
-    <ul id="saved-regrets-list">
-      <li>
-        <ul>
-          <li class="regret-header">
+
+    <!-- Render DB on page -->
+    <% console.log('regret', regret); %>
+    <% if (regret.length > 0) { %>
+      <ul id="saved-regrets-list">
+        <% regret.forEach(regret => { %>
+          <li data-id="<%= regret.id %>">
             <ul>
-              <li>NFLX</li>
-              <li>03/06/1993</li>
-              <li>$100.00</li>
+              <li class="regret-header">
+                <ul>
+                  <li><%= regret.symbol %></li>
+                  <li><%= regret.search_date %></li>
+                  <li>$<%= regret.profit %></li>
+                </ul>
+              </li>
+              <li class="regret-details">
+                <p>
+                  If you invested <span><%= regret.investment %></span> in <span><%= regret.name %>(<%= regret.symbol %>)</span> on <span><%= regret.search_date %></span>, your
+                  investment would be worth <span><%= regret.investment_worth %></span>.
+                </p>
+
+                <p>You would be <span>$900</span> richer!</p>
+
+                <div id="chart-section" class="portfolio">
+                  <h2 id="chart-title">The growth you <em>could</em> have seen in your <span><%= regret.name %>(<%= regret.symbol %>)</span>
+                    investment:</h2>
+
+                  <canvas id="chart"></canvas>
+                </div>
+
+                <a href="/delete/<%= regret.id %>"><button>delete from portfolio</button></a>
+              </li>
             </ul>
           </li>
-          <li class="regret-details">
-            <p>
-              If you invested <span>$100.00</span> in <span>Netflix Inc. (NFLX)</span> on <span>03/06/1993</span>, your
-              investment would be worth <span>$1000000</span>.
-            </p>
-
-            <p>You would be <span>$900</span> richer!</p>
-
-            <div id="chart-section" class="portfolio">
-              <h2 id="chart-title">The growth you <em>could</em> have seen in your <span>Netflix Inc.(NFLX)</span>
-                investment:</h2>
-
-              <canvas id="chart">
-
-              </canvas>
-            </div>
-
-            <button>delete from portfolio</button>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <ul>
-          <li class="regret-header">
-            <ul>
-              <li>NFLX</li>
-              <li>03/06/1993</li>
-              <li>$100.00</li>
-            </ul>
-          </li>
-          <li class="regret-details">
-            <p>
-              If you invested <span>$100.00</span> in <span>Netflix Inc. (NFLX)</span> on <span>03/06/1993</span>, your
-              investment would be worth <span>$1000000</span>.
-            </p>
-
-            <p>You would be <span>$900</span> richer!</p>
-
-            <div id="chart-section" class="portfolio">
-              <h2 id="chart-title">The growth you <em>could</em> have seen in your <span>Netflix Inc.(NFLX)</span>
-                investment:</h2>
-
-              <canvas id="chart">
-
-              </canvas>
-            </div>
-
-            <button>delete from portfolio</button>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <ul>
-          <li class="regret-header">
-            <ul>
-              <li>NFLX</li>
-              <li>03/06/1993</li>
-              <li>$100.00</li>
-            </ul>
-          </li>
-          <li class="regret-details">
-            <p>
-              If you invested <span>$100.00</span> in <span>Netflix Inc. (NFLX)</span> on <span>03/06/1993</span>, your
-              investment would be worth <span>$1000000</span>.
-            </p>
-
-            <p>You would be <span>$900</span> richer!</p>
-
-            <div id="chart-section" class="portfolio">
-              <h2 id="chart-title">The growth you <em>could</em> have seen in your <span>Netflix Inc.(NFLX)</span>
-                investment:</h2>
-
-              <canvas id="chart">
-
-              </canvas>
-            </div>
-
-            <button>delete from portfolio</button>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <ul>
-          <li class="regret-header">
-            <ul>
-              <li>NFLX</li>
-              <li>03/06/1993</li>
-              <li>$100.00</li>
-            </ul>
-          </li>
-          <li class="regret-details">
-            <p>
-              If you invested <span>$100.00</span> in <span>Netflix Inc. (NFLX)</span> on <span>03/06/1993</span>, your
-              investment would be worth <span>$1000000</span>.
-            </p>
-
-            <p>You would be <span>$900</span> richer!</p>
-
-            <div id="chart-section" class="portfolio">
-              <h2 id="chart-title">The growth you <em>could</em> have seen in your <span>Netflix Inc.(NFLX)</span>
-                investment:</h2>
-
-              <canvas id="chart">
-
-              </canvas>
-            </div>
-
-            <button>delete from portfolio</button>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <ul>
-          <li class="regret-header">
-            <ul>
-              <li>NFLX</li>
-              <li>03/06/1993</li>
-              <li>$100.00</li>
-            </ul>
-          </li>
-          <li class="regret-details">
-            <p>
-              If you invested <span>$100.00</span> in <span>Netflix Inc. (NFLX)</span> on <span>03/06/1993</span>, your
-              investment would be worth <span>$1000000</span>.
-            </p>
-
-            <p>You would be <span>$900</span> richer!</p>
-
-            <div id="chart-section" class="portfolio">
-              <h2 id="chart-title">The growth you <em>could</em> have seen in your <span>Netflix Inc.(NFLX)</span>
-                investment:</h2>
-
-              <canvas id="chart">
-
-              </canvas>
-            </div>
-
-            <button>delete from portfolio</button>
-          </li>
-        </ul>
-      </li>
-    </ul>
+        <% }) %>
+      </ul>
+    <% } else { %>
+    <!-- If no rows in database -->
+    <p>You have No regrets</p>
+    <% } %>
 
   </main>
 
