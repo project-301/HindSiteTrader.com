@@ -8,6 +8,7 @@
 const express = require('express');
 const superagent = require('superagent');
 const pg = require('pg');
+const methodOverride = require('method-override');
 // moment.js helps with formatting dates for the line graph
 const moment = require('moment');
 moment().format();
@@ -27,7 +28,6 @@ app.use(express.static('./public'));
 
 // TODO: Middleware to handle PUT and DELETE
 // Class demo code below from seattle-301d44/13-update-delete/demos/todo-app/server.js:
-/*
 app.use(methodOverride((request, response) => {
   if (request.body && typeof request.body === 'object' && '_method' in request.body) {
     // look in urlencoded POST bodies and delete it
@@ -36,7 +36,6 @@ app.use(methodOverride((request, response) => {
     return method;
   }
 }))
-*/
 
 // Database setup
 const client = new pg.Client(process.env.DATABASE_URL);
@@ -198,6 +197,16 @@ function getPortfolio(request, response) {
     });
 }
 
+// TODO Function to delete a saved regret from portfolio
+function deleteRegret(request, response) {
+  console.log('deleteRegret function entered');
+
+  // SQL query to delete row from table
+
+  // Logic to hide/remove deleted regret from view
+    // Need to add class attribute to the deleted regret so we can hide it with JS or CSS?
+
+} 
 
 // TODO Render "About Us" view
 // function getAbout(request, response) {
