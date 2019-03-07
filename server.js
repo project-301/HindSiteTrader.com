@@ -39,9 +39,9 @@ app.use(methodOverride((request, response) => {
 */
 
 // Database setup
-// const client = new pg.Client(process.env.DATABASE_URL);
-// client.connect();
-// client.on('error', err => console.log(err));
+const client = new pg.Client(process.env.DATABASE_URL);
+client.connect();
+client.on('error', err => console.log(err));
 
 // Sets the view engine for server-side templating
 app.set('view engine', 'ejs');
@@ -64,15 +64,15 @@ app.get('/graph-data', (request, response) => {
   response.send({ labels: latestSavedRegretObj.graph_labels, data: latestSavedRegretObj.graph_data })
 });
 
-// "Save Regret" route
+// TODO "Save Regret" route
 // When user clicks "Save to my results" button, update latest Regret object to contain new Regret created in getResults() function
 // THEN insert the Regret object into DB
 // THEN redirect user to portfolio.ejs view
-// app.get('/save-regret', saveRegret);
+app.post('/save-regret', saveRegret);
 
-// Portfolio route
+// TODO Portfolio route
 // When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button), render portfolio view (/views/pages/portfolio.ejs)
-// app.get('/portfolio', getPortfolio);
+app.get('/portfolio', getPortfolio);
 
 // About route
 // When user clicks on "About" link in footer, renders "about us" view (/views/pages/about.ejs)
@@ -99,10 +99,6 @@ function Regret(apiPriceData, investment, name, symbol) {
   const datesArray = getSimplifiedData(apiPriceData).map(monthData => monthData['date']);
   const pricesArray = getSimplifiedData(apiPriceData).map(monthData => parseFloat(monthData['adjPrice'].toFixed(2)));
 
-  // Fill arrays with data for client-side ajax request (uses Moment.js to reformat dates)
-  latestSavedRegretObj.chartLabels = datesArray.map(date => moment(date).format('MMM YYYY')).toString(); // x-coordinates
-  latestSavedRegretObj.chartData = pricesArray.toString(); // y-coordinates
-
   this.symbol = symbol;
   this.name = name;
   this.search_date = datesArray[0];
@@ -112,8 +108,10 @@ function Regret(apiPriceData, investment, name, symbol) {
   this.investment = investment;
   this.investment_worth = (this.investment / this.past_price) * this.search_date_price;
   this.profit = this.investment_worth - this.investment;
-  this.graph_labels = latestSavedRegretObj.chartLabels;
-  this.graph_data = latestSavedRegretObj.chartData;
+
+  // Fill arrays with data for client-side ajax request (uses Moment.js to reformat dates)
+  this.graph_labels = datesArray.map(date => moment(date).format('MMM YYYY')).toString(); // x-coordinates
+  this.graph_data = pricesArray.toString(); // y-coordinates
 }
 
 // **************************************************
@@ -137,41 +135,68 @@ function getResults(request, response) {
 
   superagent.get(url) // Send 1st API request
     .then(symbolSearchResults => {
+      console.log('symbolSearchResults.body:', symbolSearchResults.body);
       let symbol = symbolSearchResults.body.bestMatches[0]['1. symbol'];
       let name = symbolSearchResults.body.bestMatches[0]['2. name'];
-      console.log('132 symbol:', symbol);
-      console.log('133 name:', name);
+      console.log('140 symbol:', symbol);
+      console.log('141 name:', name);
 
       // Creates url for 2nd API request, using symbol from 1st request
       let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
       superagent.get(urlTwo) // Send 2nd API request to get the past stock values
         .then(priceData => {
-          latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol) // Run response through constructor model
+          latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol); // Run response through constructor model
         })
         .then(regret => {
-          console.log('141 regret', latestSavedRegretObj)
+          console.log('151 latestSavedRegretObj', latestSavedRegretObj)
           return response.render('pages/result', { regret: latestSavedRegretObj })
         })
     })
 }
 
-// Callback that fires when user clicks "Save to my regrets" button
-// Saves regret object to SQL portfolio table
-// function saveRegret(request, response) {
-//   console.log('request.body', request.body);
-// let regret = latestSavedRegretObj
-// }
+// TODO Callback to save regret object to SQL portfolio table
+// Fires when user clicks "Save to my regrets" button
+function saveRegret(request, response) {
+  console.log('saveRegret() function entered');
+  console.log('161 latestSavedRegretObj:', latestSavedRegretObj);
 
-// Callback that gets saved regrets from DB and renders on portfolio.ejs view
-// function getPortfolio(request, response) {
+  let { symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data } = latestSavedRegretObj;
 
-//   const SQL =`SELECT * FROM portfolio;`;
-//   const value=
-//    response.render('pages/portfolio');
-//    app.use(express.static('./public'));
-// }
+  let SQL = 'INSERT INTO portfolio(symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);';
+  console.log('166 SQL:', SQL);
 
+  // TODO Create variable to hold values
+  let values = [symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data];
+  console.log('169 values:', values);
+
+  return client.query(SQL, values)
+    .then(() => response.redirect('/portfolio'))
+  // console.log('173:', result);
+    // })
+    .catch(error => {
+      request.error = error
+      getError(request, response)
+    });
+}
+
+// TODO Callback that gets saved regrets from DB and renders on portfolio.ejs view
+function getPortfolio(request, response) {
+  let SQL = 'SELECT * FROM portfolio;';
+
+  return client.query(SQL)
+    .then(result => {
+      console.log('185 results:', result.rows)
+      response.render('pages/portfolio', {regret: result.rows})
+    })
+    .catch(error => {
+      request.error = error;
+      getError(request, response);
+    });
+}
+
+
+// TODO Render "About Us" view
 // function getAbout(request, response) {
 //   response.render('pages/about');
 //   app.use(express.static('./public'));
@@ -210,7 +235,6 @@ function getSimplifiedData(json) {
 }
 
 function getError(request, response) {
-  // console.error(request.body);
+  console.error(request.error);
   response.render('pages/error');
-  app.use(express.static('./public'));
 }
