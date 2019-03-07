@@ -1,8 +1,29 @@
 * { 
     box-sizing: border-box; 
-    text-align: center;
+    /* text-align: center; */
+    font-size: 4vw;
 }
 
+h1 {
+    font-size: 5vw;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 body{
     background-color: hsl(44, 79%, 96%);
     padding: 0 1vw 13vh;
@@ -12,6 +33,29 @@ body{
     height: 100%;
 }
 
+header {
+    background-color: hsl(44, 79%, 86%);
+    border-radius: 0px 0px 20px 20px;
+}
+
 a {
     text-decoration: none;
 }
+
+span {
+    padding: .2em 1em;
+    color: hsl(54, 100%, 75%);
+    background-color: hsla(266, 69%, 40%, 0.5);
+    line-height: 1.9em;
+    border-radius: 1em;
+}
+
+footer {
+    font-size: .5em;
+    font-family: sans-serif;
+    color: white;
+    font-style: italic;
+    background-color: hsl(44, 39%, 46%);
+    border-radius: 20px 20px 0 0;
+}
+*/
