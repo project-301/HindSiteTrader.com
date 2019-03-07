@@ -1,61 +1,89 @@
-* { 
-    box-sizing: border-box; 
+* {
+    box-sizing: border-box;
     /* text-align: center; */
-    font-size: 4vw;
+    /* font-size: 4vw; */
 }
 
-h1 {
-    font-size: 5vw;
+html {
+    height: 100%;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
-body{
+Responsive typography: 
+https://css-tricks.com/fun-viewport-units/
+*/
+
+body, input {
+    /* Minimum 16x, and grows more slowly  */
+    /* (half the rate of screen growth) */
+    font-size: calc(16px + 0.5vw);
+    /* Line-height based on font-size, */
+    /* with addition viewport-relative growth */
+    line-height: calc(1.1em + 0.5vw);
+    margin: .5em;
+}
+
+body {
     background-color: hsl(44, 79%, 96%);
-    padding: 0 1vw 13vh;
     font-family: monospace;
-    min-width: 320px;
-    max-width: 960px;
-    height: 100%;
+
 }
 
 header {
     background-color: hsl(44, 79%, 86%);
     border-radius: 0px 0px 20px 20px;
+
 }
 
-a {
-    text-decoration: none;
+h1 {
+    /* Grows more quickly,  */
+    /* allowing for wider variation on larger screens */
+    font-size: calc(18px + 1.7vw);
+    font-family: 'Nanum Gothic Coding', monospace;
 }
 
 span {
-    padding: .2em 1em;
+    /* padding: .2em 1em; */
     color: hsl(54, 100%, 75%);
     background-color: hsla(266, 69%, 40%, 0.5);
-    line-height: 1.9em;
+    /* line-height: 1.9em; */
     border-radius: 1em;
 }
 
-footer {
-    font-size: .5em;
-    font-family: sans-serif;
+fieldset {
+    /* border: 3px inset hsl(44, 79%, 96%); */
+        /* line-height: 2em; */
+
+    border-radius: 10px;
+    background-color: hsl(266, 69%, 95%);
+}
+input {
+    border: 2px dashed hsl(266, 69%, 85%);
+    background-color: white;
+    border-radius: 3px;
+}
+
+button {
+    font-size: calc(20px + 1.5vw);
+    font-family: 'Nanum Gothic Coding', monospace;
     color: white;
-    font-style: italic;
+    background-color: hsl(14, 98%, 22%);
+    border: solid 3px hsl(14, 98%, 22%);
+    border-radius: 5px; 
+}
+
+footer {
+    color: white;
     background-color: hsl(44, 39%, 46%);
     border-radius: 20px 20px 0 0;
+    font-family: sans-serif;
+    font-style: italic;
+    font-size: calc(12px + 0.5vw);
+    font-family: 'Nanum Gothic Coding', monospace;
+}
+
+/*
+a {
+    text-decoration: none;
 }
 */

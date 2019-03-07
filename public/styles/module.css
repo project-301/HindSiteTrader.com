@@ -1,90 +1,12 @@
-/* Header partial styles */
-#header {
-
-}
-#header h1 {
-    /* font-family: 'Nanum Gothic Coding', monospace; */
-    /* font-size: 200%; */
-}
-/* #header img {
-    height: 50px;
-} */
-
-/* Footer partial styles */
-#footer {
-
-}
 #footer a {
-    /* color: white; */
-    /* font-size: 2vh; */
-    /* font-family: 'Nanum Gothic Coding', monospace; */
-    /* line-height: 5vh; */
+    font-family: 'Nanum Gothic Coding', monospace;
     /* border-bottom: 1px solid hsl(14, 98%, 22%); */
-}
-/* #footer img {
-    height: 5vh;
-} */
-
-
-
-main > img{
-    /* height: 50px; */
-}
-/* .fieldset{
-    font-family: monospace;
-    font-size: 3vh;
-    border: 3px inset hsl(44, 79%, 96%);
-    border-radius: 10px;
-    background-color: hsl(266, 69%, 95%); */
-    /* margin-bottom: 2vh; */
-    /* line-height: 2em; */
-/* } */
-input{
-    /* display: block; */
-    /* width: 100%; */
-    /* font-size: 5vh;
-    border: 2px dashed hsl(266, 69%, 85%);
-    background-color: white;
-    border-radius: 3px; */
-    /* padding: 1px 2px; */
-    /* margin-bottom: 2vh; */
-}
-/* .dateclass.placeholderclass::before {
-    width: 100%;
-    content: attr(placeholder);
-  }
-  
-.dateclass.placeholderclass:hover::before {
-    width: 0%;
-    content: "";
-  } */
-form > p{
-    /* display: block; */
-    /* font-size: 2.5vh; */
-    /* text-align: center; */
-}
-button { 
-    /* display: block; */
-    /* margin: 1vh auto; */
-    /* padding: 2vh 10vw; */
-    /* font-size: 4vh; */
-    /* font-family: 'Nanum Gothic Coding', monospace; */
-    border: solid 3px hsl(14, 98%, 22%);
-    border-radius: 5px; 
-    background-color: hsl(14, 98%, 22%);
-    color: white;
 }
 
 button:hover{
-    background-color:hsl(217, 96%, 64%);
-    border: inset 3px hsl(217, 96%, 64%);
+    color: hsl(54, 100%, 75%);
+
+    background-color:hsla(266, 69%, 40%, 0.5);
+    border: inset 3px hsla(266, 69%, 40%, 0.5);
 }
-/* p { */
-    /* font-size: 1.2em; */
-    /* margin: 0 2vw .7em; */
-/* } */
-/* button+p { */
-    /* margin-top: 3vh; */
-    /* font-size: 1.5em; */
-/* } */
 
