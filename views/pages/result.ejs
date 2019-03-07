@@ -9,7 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 </head>
 
-<body id="body">
+<body id="body" class="result">
 
   <header id="header">
     <%- include('../layout/header') %>
@@ -50,12 +50,16 @@
 
     <section id="result-actions-section">
       <form action="/save-regret" method="post" id="save-form">
+        <p>Wanna cry about this one later?</p>
         <button type="submit">save to my regrets</button>
       </form>
 
-      <p>Rather forget this one?</p>
-      <a href="/"><button>search for a new regret</button></a>
+      <div id="search-div">
+          <p>Rather forget this one?</p>
+          <a href="/"><button>search for a new regret</button></a>
+      </div>
     </section>
+      
 
 
 

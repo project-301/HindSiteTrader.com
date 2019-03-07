@@ -131,7 +131,7 @@ function getResults(request, response) {
 
   // Creates url for 1st API request
   // Takes string typed out by user, returns search results (and symbols)
-  let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
+let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
   superagent.get(url) // Send 1st API request
     .then(symbolSearchResults => {
