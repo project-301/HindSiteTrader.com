@@ -13,7 +13,31 @@
   </header>
 
   <main id="main">
-    <p>You have No regrets</p>
+
+    <section id="regret-view-list">
+
+      <!-- If rows in DB -->
+      <ul id="regret-list">   
+        <% if (result.rowCount > 0) { %>  <!--  -->
+        <% console.log('result.rowCount', result.rowCount); %>
+        <!-- Render DB rows on page -->
+        <% result.forEach(regret => { %>
+        <li class="regret-item"> 
+          <h3>Regret: <%= regret.name %> (<%= regret.symbol %>)</h3>
+          <!-- What data items to display here? Either detail view of an individual regret, or just display all regrets with full details and charts displayed? -->
+            
+            <!-- IF we add button to view details for each regret, we'll need link to details.ejs view based on id of selected regret AND include Delete button -->
+            
+            <!-- ELSE if no indiv details view, we'll need to render full info for each regret on portfolio page AND include Delete button -->
+
+        </li>
+        <% }) %>
+      </ul>
+      
+      <!-- ELSE if no rows in DB, display message -->
+      <p>You have no regrets!</p>
+
+    </section>  
   </main>
 
   <footer id="footer">
