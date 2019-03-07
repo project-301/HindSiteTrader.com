@@ -4,6 +4,7 @@
 
 <head>
   <%- include('../layout/head') %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 
 <body id="body">
@@ -12,13 +13,170 @@
     <%- include('../layout/header') %>
   </header>
 
-  <main id="main">
-    <p>You have No regrets</p>
+  <main id="main" class="portfolio">
+    <!-- <p>You have No regrets</p> -->
+    <h2 id="portfolio-title">Your Regret Portfolio</h2>
+    <ul id="saved-regrets-list">
+      <li>
+        <ul>
+          <li class="regret-header">
+            <ul>
+              <li>NFLX</li>
+              <li>03/06/1993</li>
+              <li>$100.00</li>
+            </ul>
+          </li>
+          <li class="regret-details">
+            <p>
+              If you invested <span>$100.00</span> in <span>Netflix Inc. (NFLX)</span> on <span>03/06/1993</span>, your
+              investment would be worth <span>$1000000</span>.
+            </p>
+
+            <p>You would be <span>$900</span> richer!</p>
+
+            <div id="chart-section" class="portfolio">
+              <h2 id="chart-title">The growth you <em>could</em> have seen in your <span>Netflix Inc.(NFLX)</span>
+                investment:</h2>
+
+              <canvas id="chart">
+
+              </canvas>
+            </div>
+
+            <button>delete from portfolio</button>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <ul>
+          <li class="regret-header">
+            <ul>
+              <li>NFLX</li>
+              <li>03/06/1993</li>
+              <li>$100.00</li>
+            </ul>
+          </li>
+          <li class="regret-details">
+            <p>
+              If you invested <span>$100.00</span> in <span>Netflix Inc. (NFLX)</span> on <span>03/06/1993</span>, your
+              investment would be worth <span>$1000000</span>.
+            </p>
+
+            <p>You would be <span>$900</span> richer!</p>
+
+            <div id="chart-section" class="portfolio">
+              <h2 id="chart-title">The growth you <em>could</em> have seen in your <span>Netflix Inc.(NFLX)</span>
+                investment:</h2>
+
+              <canvas id="chart">
+
+              </canvas>
+            </div>
+
+            <button>delete from portfolio</button>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <ul>
+          <li class="regret-header">
+            <ul>
+              <li>NFLX</li>
+              <li>03/06/1993</li>
+              <li>$100.00</li>
+            </ul>
+          </li>
+          <li class="regret-details">
+            <p>
+              If you invested <span>$100.00</span> in <span>Netflix Inc. (NFLX)</span> on <span>03/06/1993</span>, your
+              investment would be worth <span>$1000000</span>.
+            </p>
+
+            <p>You would be <span>$900</span> richer!</p>
+
+            <div id="chart-section" class="portfolio">
+              <h2 id="chart-title">The growth you <em>could</em> have seen in your <span>Netflix Inc.(NFLX)</span>
+                investment:</h2>
+
+              <canvas id="chart">
+
+              </canvas>
+            </div>
+
+            <button>delete from portfolio</button>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <ul>
+          <li class="regret-header">
+            <ul>
+              <li>NFLX</li>
+              <li>03/06/1993</li>
+              <li>$100.00</li>
+            </ul>
+          </li>
+          <li class="regret-details">
+            <p>
+              If you invested <span>$100.00</span> in <span>Netflix Inc. (NFLX)</span> on <span>03/06/1993</span>, your
+              investment would be worth <span>$1000000</span>.
+            </p>
+
+            <p>You would be <span>$900</span> richer!</p>
+
+            <div id="chart-section" class="portfolio">
+              <h2 id="chart-title">The growth you <em>could</em> have seen in your <span>Netflix Inc.(NFLX)</span>
+                investment:</h2>
+
+              <canvas id="chart">
+
+              </canvas>
+            </div>
+
+            <button>delete from portfolio</button>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <ul>
+          <li class="regret-header">
+            <ul>
+              <li>NFLX</li>
+              <li>03/06/1993</li>
+              <li>$100.00</li>
+            </ul>
+          </li>
+          <li class="regret-details">
+            <p>
+              If you invested <span>$100.00</span> in <span>Netflix Inc. (NFLX)</span> on <span>03/06/1993</span>, your
+              investment would be worth <span>$1000000</span>.
+            </p>
+
+            <p>You would be <span>$900</span> richer!</p>
+
+            <div id="chart-section" class="portfolio">
+              <h2 id="chart-title">The growth you <em>could</em> have seen in your <span>Netflix Inc.(NFLX)</span>
+                investment:</h2>
+
+              <canvas id="chart">
+
+              </canvas>
+            </div>
+
+            <button>delete from portfolio</button>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
   </main>
 
   <footer id="footer">
     <%- include('../layout/footer') %>
   </footer>
+
+  <script src="portfolio.js"></script>
+
 
 </body>
 
