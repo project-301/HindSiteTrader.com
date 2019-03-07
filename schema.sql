@@ -10,10 +10,10 @@ CREATE TABLE IF NOT EXISTS portfolio (
   id SERIAL PRIMARY KEY,
   symbol VARCHAR(15),
   name VARCHAR(50),
-  search_date INTEGER NOT NULL, -- unix timestamp (so we can display/use in various ways)
+  search_date VARCHAR(10), -- unix timestamp (so we can display/use in various ways)
   search_date_price NUMERIC(10, 2),
   past_price NUMERIC(10, 2),
-  past_date INTEGER NOT NULL, -- unix timestamp (so we can display/use in various ways)
+  past_date VARCHAR(10), -- unix timestamp (so we can display/use in various ways)
   investment NUMERIC(10, 2), -- max investment is 99,999,999.99
   investment_worth NUMERIC(10, 2),
   profit NUMERIC(10, 2),

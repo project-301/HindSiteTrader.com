@@ -72,7 +72,7 @@ app.post('/save-regret', saveRegret);
 
 // TODO Portfolio route
 // When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button), render portfolio view (/views/pages/portfolio.ejs)
-// app.get('/portfolio', getPortfolio);
+app.get('/portfolio', getPortfolio);
 
 // About route
 // When user clicks on "About" link in footer, renders "about us" view (/views/pages/about.ejs)
@@ -135,6 +135,7 @@ function getResults(request, response) {
 
   superagent.get(url) // Send 1st API request
     .then(symbolSearchResults => {
+      console.log('symbolSearchResults.body:', symbolSearchResults.body);
       let symbol = symbolSearchResults.body.bestMatches[0]['1. symbol'];
       let name = symbolSearchResults.body.bestMatches[0]['2. name'];
       console.log('140 symbol:', symbol);
@@ -160,27 +161,40 @@ function saveRegret(request, response) {
   console.log('saveRegret() function entered');
   console.log('161 latestSavedRegretObj:', latestSavedRegretObj);
 
-  let { symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data } = Object.keys(latestSavedRegretObj);
+  let { symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data } = latestSavedRegretObj;
 
-  let SQL = `INSERT INTO portfolio(symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`;
+  let SQL = 'INSERT INTO portfolio(symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);';
+  console.log('166 SQL:', SQL);
 
   // TODO Create variable to hold values
   let values = [symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data];
   console.log('169 values:', values);
 
   return client.query(SQL, values)
-  //   .then(response.redirect('/portfolio'))
-    .catch(err => getError(err, response));
+    .then(() => response.redirect('/portfolio'))
+  // console.log('173:', result);
+    // })
+    .catch(error => {
+      request.error = error
+      getError(request, response)
+    });
 }
 
 // TODO Callback that gets saved regrets from DB and renders on portfolio.ejs view
-// function getPortfolio(request, response) {
-//   let SQL = 'SELECT * FROM portfolio;';
+function getPortfolio(request, response) {
+  let SQL = 'SELECT * FROM portfolio;';
 
-//   return client.query(SQL)
-//     .then(results => response.render('pages/portfolio', {results: results.rows}))
-//     .catch(getError);
-// }
+  return client.query(SQL)
+    .then(result => {
+      console.log('185 results:', result.rows)
+      response.render('pages/portfolio', {regret: result.rows})
+    })
+    .catch(error => {
+      request.error = error;
+      getError(request, response);
+    });
+}
+
 
 // TODO Render "About Us" view
 // function getAbout(request, response) {
@@ -221,7 +235,6 @@ function getSimplifiedData(json) {
 }
 
 function getError(request, response) {
-  // console.error(request.body);
+  console.error(request.error);
   response.render('pages/error');
-  app.use(express.static('./public'));
 }
