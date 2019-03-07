@@ -19,7 +19,7 @@ body, input {
     font-size: calc(16px + 0.5vw);
     /* Line-height based on font-size, */
     /* with addition viewport-relative growth */
-    line-height: calc(1.1em + 0.5vw);
+    line-height: calc(1.5em + 0.5vw);
     margin: .5em;
 }
 
@@ -42,12 +42,20 @@ h1 {
     font-family: 'Nanum Gothic Coding', monospace;
 }
 
+h2 {
+    
+}
+
 span {
-    /* padding: .2em 1em; */
+    padding: .1em .3em;
     color: hsl(54, 100%, 75%);
     background-color: hsla(266, 69%, 40%, 0.5);
     /* line-height: 1.9em; */
     border-radius: 1em;
+}
+
+em {
+    font-style: italic;
 }
 
 fieldset {

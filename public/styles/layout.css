@@ -8,6 +8,10 @@
     margin: 0px auto;
 }
 
+/* ------------------------------ */
+/* header & footer */
+/* ------------------------------ */
+
 #header, #footer {
     display: flex;
     flex-flow: row nowrap;
@@ -39,7 +43,11 @@
     width: 100%;
 }
 
-#main, #search-form, .fieldset, label {
+/* ------------------------------ */
+/* general flexbox layout */
+/* ------------------------------ */
+
+#main, #search-form, #result-text-section, #chart-section, #result-actions-section, .fieldset, label {
     display: flex;
     flex-flow: column;
     align-items: center;
@@ -48,6 +56,10 @@
 #main {
     justify-content: center;
 }
+
+/* ------------------------------ */
+/* index.ejs specific */
+/* ------------------------------ */
 
 #search-form {
     justify-content: space-evenly;
@@ -58,14 +70,44 @@
     text-align: center;
 }
 
-/* div {
-    border: 2px inset hsl(44, 79%, 96%);
-    border-radius: 10px;
-    background-color: hsl(266, 69%, 95%);
+/* ------------------------------ */
+/* result.ejs specific */
+/* ------------------------------ */
+
+#chart-section {
     color: hsl(266, 69%, 40%);
-    padding: 3vh 5vw 0;
-    margin-bottom: 1vh;
-} */
+    background-color: hsl(266, 69%, 95%);
+    border-radius: 10px;
+    /* border: 2px inset hsl(44, 79%, 96%); */
+}
+
+#chart-title {
+    text-align: center;
+    font-size: calc(13px + 0.5vw);
+    /* Line-height based on font-size, */
+    /* with addition viewport-relative growth */
+    line-height: calc(1.1em + 0.5vw);
+    margin: .5em;
+    border-bottom: 1px solid #BAA1E8;
+
+}
+
+#chart {
+    max-width: 100%;
+    max-height: 100%;
+
+}
+
+#result-text-section {
+    text-align: center;
+    max-width: 80%;
+}
+
+
+
+/* ------------------------------ */
+/* portfolio.ejs specific */
+/* ------------------------------ *
 
 /* div h2 {
     margin-bottom: 3vh;
