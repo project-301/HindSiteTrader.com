@@ -1,7 +1,5 @@
 * {
     box-sizing: border-box;
-    /* text-align: center; */
-    /* font-size: 4vw; */
 }
 
 html {
@@ -26,7 +24,7 @@ body, input {
 body {
     background-color: hsl(44, 79%, 96%);
     font-family: monospace;
-
+    min-height: 600px;
 }
 
 header {
@@ -59,9 +57,6 @@ em {
 }
 
 fieldset {
-    /* border: 3px inset hsl(44, 79%, 96%); */
-        /* line-height: 2em; */
-
     border-radius: 10px;
     background-color: hsl(266, 69%, 95%);
 }
@@ -70,10 +65,12 @@ input {
     border: 2px dashed hsl(266, 69%, 85%);
     background-color: white;
     border-radius: 3px;
+    font-family: sans-serif;
 }
 
 button {
-    font-size: calc(20px + 1.5vw);
+    font-size: calc(20px + 1.1vw);
+    line-height: 1;
     font-family: 'Nanum Gothic Coding', monospace;
     color: white;
     background-color: hsl(14, 98%, 22%);
