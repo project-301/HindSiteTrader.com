@@ -70,13 +70,13 @@ app.get('/graph-data', (request, response) => {
 app.post('/save-regret', saveRegret);
 
 // TODO Portfolio route
-// When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button), render portfolio view (/views/pages/portfolio.ejs)
+// When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button?), render portfolio view (/views/pages/portfolio.ejs)
 app.get('/portfolio', getPortfolio);
 
 // Route for deleting a regret
-app.put('/delete/:regret_id', deleteRegret);
+app.get('/delete/:regret_id', deleteRegret);
 
-// About route
+// About Us route
 // When user clicks on "About" link in footer, renders "about us" view (/views/pages/about.ejs)
 // app.get('/about', getAbout)
 
@@ -91,11 +91,9 @@ app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
 // Models
 // **************************************************
 
-// Arrays to hold chart data that will be passed to the client-side app.js
-// Note that these will be reset each time a Regret instance is constructed
-// let chartLabels = [];
-// let chartData = [];
-let latestSavedRegretObj = {}; // Will temporarily store whole regret object created in getResults() function
+// Object that includes arrays of chart data to be passed to client-side app.js 
+// Gets reset each time a Regret instance is constructed
+let latestSavedRegretObj = {};
 
 function Regret(apiPriceData, investment, name, symbol) {
   const datesArray = getSimplifiedData(apiPriceData).map(monthData => monthData['date']);
@@ -179,15 +177,14 @@ function saveRegret(request, response) {
     .catch(error => {
       console.log('180 error caught');
       request.error = error;
-      console.log('request.error', request.error);
       getError(request, response)
     });
 }
 
 // TODO Callback that gets saved regrets from DB and renders on portfolio.ejs view
 function getPortfolio(request, response) {
-  console.log('getPortfolio() function entered')
-  let SQL = 'SELECT * FROM portfolio;';
+  console.log('getPortfolio function entered')
+  let SQL = 'SELECT * FROM portfolio;'; // NEED to filter out some columns for rendering?
 
   return client.query(SQL)
     .then(result => {
@@ -197,7 +194,6 @@ function getPortfolio(request, response) {
     .catch(error => {
       console.log('193 error caught');
       request.error = error;
-      console.log('request.error', request.error);
       getError(request, response);
     });
 }
@@ -206,18 +202,16 @@ function getPortfolio(request, response) {
 function deleteRegret(request, response) {
   console.log('deleteRegret function entered');
 
-  // SQL query to delete row from table
-  let SQL = `DELETE FROM portfolio WHERE id=$1;`
+  // TODO Need to create variable that's assigned id from request.body ?
 
-  // Logic to hide/remove deleted regret from view
-  // Need to add class attribute to the deleted regret so we can hide it with JS or CSS? OR just rerender view after regret has been deleted?
+  let SQL = `DELETE FROM portfolio WHERE id=$1;`;
+  let values = [request.params.regret_id];
 
-  client.query(SQL) // NEED to return this or not?
-    .then(response.redirect(`/portfolio`)) // OR re-render? ALSO, verify this route?
+  client.query(SQL, values) // NEED to return this or not?
+    .then(response.redirect('/portfolio')) // OR re-render? ALSO, verify this route?
     .catch(error => {
       console.log('216 error caught');
       request.error = error;
-      console.log('request.error', request.error);
       getError(request, response);
     });
 }

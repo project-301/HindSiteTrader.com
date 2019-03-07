@@ -4,6 +4,7 @@
 
 <head>
   <%- include('../layout/head') %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 
 <body id="body">
@@ -12,40 +13,56 @@
     <%- include('../layout/header') %>
   </header>
 
-  <main id="main">
+  <main id="main" class="portfolio">
+    <h2 id="portfolio-title">Your Regret Portfolio</h2>
 
-    <section id="regret-view-list">
+    <!-- Render DB on page -->
+    <% console.log('regret', regret); %>
+    <% if (regret.length > 0) { %>
+      <ul id="saved-regrets-list">
+        <% regret.forEach(regret => { %>
+          <li data-id="<%= regret.id %>">
+            <ul>
+              <li class="regret-header">
+                <ul>
+                  <li><%= regret.symbol %></li>
+                  <li><%= regret.search_date %></li>
+                  <li>$<%= regret.profit %></li>
+                </ul>
+              </li>
+              <li class="regret-details">
+                <p>
+                  If you invested <span><%= regret.investment %></span> in <span><%= regret.name %>(<%= regret.symbol %>)</span> on <span><%= regret.search_date %></span>, your
+                  investment would be worth <span><%= regret.investment_worth %></span>.
+                </p>
 
-      <!-- If rows in DB -->
-      <ul id="regret-list">   
-        <% console.log('result.rowCount', result.rowCount); %>
-        <% if (result.rowCount > 0) { %>
+                <p>You would be <span>$900</span> richer!</p>
 
-        
-        <!-- Render DB rows on page -->
-        <% result.forEach(regret => { %>
-        <li class="regret-item"> 
-          <h3>Regret: <%= regret.name %> (<%= regret.symbol %>)</h3>
-          <!-- What data items to display here? Either detail view of an individual regret, or just display all regrets with full details and charts displayed? -->
-            
-            <!-- IF we add button to view details for each regret, we'll need link to details.ejs view based on id of selected regret AND include Delete button -->
-            
-            <!-- ELSE if no indiv details view, we'll need to render full info for each regret on portfolio page AND include Delete button -->
-              <!-- IN this case, should we put our EJS for rendering regret info into a partial and then include that in both result.ejs AND portfolio.ejs? -->
+                <div id="chart-section" class="portfolio">
+                  <h2 id="chart-title">The growth you <em>could</em> have seen in your <span><%= regret.name %>(<%= regret.symbol %>)</span>
+                    investment:</h2>
 
-        </li>
+                  <canvas id="chart"></canvas>
+                </div>
+
+                <a href="/delete/<%= regret.id %>"><button>delete from portfolio</button></a>
+              </li>
+            </ul>
+          </li>
         <% }) %>
       </ul>
-      
-      <!-- ELSE if no rows in DB, display message -->
-      <p>You have no regrets!</p>
-
-    </section>  
+    <% } else { %>
+    <!-- If no rows in database -->
+    <p>You have No regrets</p>
+    <% } %>
   </main>
 
   <footer id="footer">
     <%- include('../layout/footer') %>
   </footer>
+
+  <script src="portfolio.js"></script>
+
 
 </body>
 
