@@ -1,64 +1,147 @@
-header{
+#body {
+    height: 100%;
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-around;
-    align-items: center;
-    background-color: hsl(44, 79%, 86%);
-    border-radius: 0px 0px 20px 20px;
-    margin-bottom: 1vh;
-    padding: 2vh;
-}
-fieldset {
-    height: 60vh;
-    padding: 2vh 2vw;
-    display: flex;
-    flex-flow: column, nowrap;
-    align-items: center;
-}
-div {
-    border: 2px inset hsl(44, 79%, 96%);
-    border-radius: 10px;
-    background-color: hsl(266, 69%, 95%);
-    color: hsl(266, 69%, 40%);
-    padding: 3vh 5vw 0;
-    margin-bottom: 1vh;
-}
-div h2 {
-    margin-bottom: 3vh;
-}
-footer {
-    font-size: .5em;
-    font-family: sans-serif;
-    color: white;
-    font-style: italic;
-    position: fixed;
-    width: 100%;
-    bottom: 0px;
-    padding: 2vh 2vw;
-    background-color: hsl(44, 39%, 46%);
-    border-radius: 20px 20px 0 0;
-}
-footer a:first-of-type {
-    float: left;
-    border: 0px;
-}
-footer a img {
-    filter: invert(1);
-    text-decoration: none;
-}
-footer img {
-    filter: invert(1);
-    float: right;
-}
-span {
-    padding: .2em 1em;
-    color: hsl(54, 100%, 75%);
-    background-color: hsla(266, 69%, 40%, 0.5);
-    line-height: 1.9em;
-    border-radius: 1em;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    min-height: 500px;
+    max-width: 1020px;
+    margin: 0px auto;
 }
 
-@media screen and (min-width: 733px){
+/* ------------------------------ */
+
+/* header & footer */
+
+/* ------------------------------ */
+
+#header, #footer {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    height: 8%;
+    max-height: 100px;
+}
+
+#header>*, #footer>* {
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+}
+
+.header-text, .footer-text {
+    display: flex;
+    flex-flow: column nowrap;
+    width: 60%;
+}
+
+#header a, #footer a {
+    width: 15%;
+    height: 80%;
+}
+
+#header img, #footer img {
+    height: 100%;
+    width: 100%;
+}
+
+/* ------------------------------ */
+
+/* general flexbox layout */
+
+/* ------------------------------ */
+
+#main, #search-form, #result-text-section, #chart-section, #result-actions-section, .fieldset, label {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+#main {
+    align-items: stretch;
+    justify-content: flex-start;
+    height: 100%;
+}
+
+/* ------------------------------ */
+
+/* index.ejs specific */
+
+/* ------------------------------ */
+
+#instructions {
+    text-align: center;
+    /* Minimum 16x, and grows more slowly  */
+    /* (half the rate of screen growth) */
+    font-size: calc(12px + 0.5vw);
+    /* Line-height based on font-size, */
+    /* with addition viewport-relative growth */
+    line-height: calc(1.2em + 0.5vw);
+    margin: .5em;
+}
+
+#search-form {
+    justify-content: space-evenly;
+    height: 100%;
+    align-items: stretch;
+}
+
+.fieldset input {
+    text-align: center;
+}
+
+/* ------------------------------ */
+
+/* result.ejs specific */
+
+/* ------------------------------ */
+
+#result-text-section {
+    margin-bottom: 1vh;
+    /* width: 100%; */
+}
+
+#chart-section {
+    max-height: 350px;
+    margin-bottom: calc(10px + 4vw);
+}
+
+#chart-section {
+    color: hsl(266, 69%, 40%);
+    background-color: hsl(266, 69%, 95%);
+    border-radius: 10px;
+}
+
+#chart-title {
+    text-align: center;
+    font-size: calc(13px + 0.5vw);
+    /* Line-height based on font-size, */
+    /* with addition viewport-relative growth */
+    line-height: calc(1.1em + 0.5vw);
+    margin: .5em;
+    border-bottom: 1px solid #BAA1E8;
+}
+
+#chart {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#result-text-section {
+    text-align: center;
+}
+
+/* ------------------------------ */
+
+/* portfolio.ejs specific */
+
+/* ------------------------------ *
+
+/* div h2 {
+    margin-bottom: 3vh;
+} */
+
+/* @media screen and (min-width: 733px){
     body {
         padding: 0;
     }
@@ -98,4 +181,4 @@ span {
 
 @media screen and (min-width: 960px) {
     
-}
+} */
