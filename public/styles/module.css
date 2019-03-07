@@ -8,3 +8,7 @@ button:hover {
     background-color: hsla(266, 69%, 40%, 0.5);
     border: inset 3px hsla(266, 69%, 40%, 0.5);
 }
+
+#footer img {
+    filter: invert(1);
+}
