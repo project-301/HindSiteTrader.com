@@ -6,25 +6,38 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 
-<body>
+<body id="body">
 
-  <header>
+  <header id="header">
     <%- include('layout/header') %>
   </header>
 
-  <main>
-    <form action="/result" method="post">
-      <fieldset>
+  <main id="main">
+    <p id="instructions">
+      The mantra "no regrets" stems from a lack of information.
+      <br />
+      HindSite Trader is a tool to cleanse you of your blissful ignorance and quantify your regrets.
+      <br />
+      <br />
+      Do you <em>really</em> want your "what-if"s answered?
+      <br />
+      Fill in the blanks to get a <strong>real</strong> answer to a question we've all asked ourselves:
+    </p>
+    <form action="/result" method="post" id="search-form">
+      <fieldset class="fieldset">
         <label>If I invested <input name="search" type="number" min="0.01" step="0.01" max="100,000"
-            value="1.23" /></label>
-        <label>In the Company <input name="search" type="text" placeholder="AAA" /></label>
-        <label>On <input name="search" type="month" placeholder="month year" onClick="$(this).removeClass('placeholderclass')" class="dateclass placeholderclass"></label>
+            placeholder="1000.00" /></label>
+        <label>in<input name="search" type="text" placeholder="a public company" /></label>
+        <label>on <input name="search" type="month" placeholder="month year" onClick="$(this).removeClass('placeholderclass')" class="dateclass placeholderclass"></label>
       </fieldset>
-      <p>How much richer would I be?</p>
-      <button type="submit">Find Out!</button>
+      <!-- <p></p> -->
+      <label class="submit-button-label">
+        How much richer would I be?<button type="submit">Find Out!</button>
+      </label>
+      
     </form>
   </main>
-  <footer>
+  <footer id="footer">
     <%- include('layout/footer') %>
   </footer>
 </body>

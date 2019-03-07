@@ -9,40 +9,59 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 </head>
 
-<body>
+<body id="body">
 
-  <header>
+  <header id="header">
     <%- include('../layout/header') %>
   </header>
 
-  <main>
-    <section>
-      <p>If you invested <span>$<%= parseFloat(regret.investment).toFixed(2)  %></span> on <span><%= regret.past_date %></span></p>
-      <p>Your investment would be worth <span>$<%= parseFloat(regret.investment_worth).toFixed(2) %></span></p>
+  <main id="main">
+
+    <section id="result-text-section">
+
+      <p>
+        If you invested <span>$<%= parseFloat(regret.investment).toFixed(2)  %></span>
+        <br />
+        in <span><%= regret.name %>(<%= regret.symbol %>)</span>
+        <br />
+        on <span><%= regret.past_date %></span>,
+        <br />
+        your investment would be worth <span>$<%= parseFloat(regret.investment_worth).toFixed(2) %></span>.
+      </p>
+
       <% if (parseFloat(regret.profit) >= 0) { %>
       <p>You would be <span>$<%= parseFloat(regret.profit).toFixed(2) %></span> richer!</p>
+
       <% } else { %>
       <p>You would be <span>$<%= Math.abs(parseFloat(regret.profit)).toFixed(2) %></span> poorer! Good for you!</p>
+
       <% } %>
+
     </section>
-    <div>
-        <h2>Your investment in <span><%= regret.name %></span> over time:</h2>
+
+    <div id="chart-section">
+      <h2 id="chart-title">The growth you <em>could</em> have seen in
+        <span><%= regret.name %>(<%= regret.symbol %>)</span> over time:</h2>
       <canvas id="chart"></canvas>
     </div>
 
-    <form action="/save-regret" method="post">
-      <button type="submit">Save to my Regrets</button>
-    </form>
+    <section id="result-actions-section">
+      <form action="/save-regret" method="post" id="save-form">
+        <button type="submit">save to my regrets</button>
+      </form>
 
-    <p>Rather forget this one?</p>
-    <a href="/"><button>Search for a new regret!</button></a>
+      <p>Rather forget this one?</p>
+      <a href="/"><button>search for a new regret</button></a>
+    </section>
+
+
 
   </main>
 
-  <footer>
+  <footer id="footer">
     <%- include('../layout/footer') %>
   </footer>
-  
+
   <script src="app.js"></script>
 
 </body>
