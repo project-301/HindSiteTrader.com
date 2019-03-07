@@ -146,10 +146,10 @@
 /* ------------------------------ */
 
 @media screen and (min-width: 540px) {
-    #body {
+    #body:not(.portfolio) {
         min-height: auto;
     }
-    #main {
+    #main:not(.portfolio) {
         flex-flow: row wrap;
         height: auto;
     }
@@ -162,13 +162,43 @@
     #result-actions-section {
         width: 100%;
     }
+ 
 }
-
-
-
 
 /* ------------------------------ */
 
 /* portfolio.ejs specific */
 
 /* ------------------------------ */
+
+#body.portfolio {
+
+}
+
+#main.portfolio {
+    display: flex;
+    flex-flow: column nowrap;
+    text-align: center;
+}
+
+.regret-header ul {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+
+    background-color: hsl(266, 69%, 95%);
+    /* border: 1px solid red; */
+}
+.regret-header ul li {
+    flex-grow: 1;
+    /* border: 2px dotted magenta; */
+}
+
+#chart-section.portfolio {
+    width: 100%;
+    margin-bottom: 0px;
+}
+
+#saved-regrets-list li {
+    margin: 3px;
+}
