@@ -41,7 +41,7 @@ app.use(methodOverride((request, response) => {
 // Database setup
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect();
-client.on('error', err => console.log(err));
+client.on('error', err => console.log('44 error', err));
 
 // Sets the view engine for server-side templating
 app.set('view engine', 'ejs');
@@ -169,7 +169,7 @@ function saveRegret(request, response) {
   // TODO Create variable to hold values
   let values = [symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data];
   console.log('169 values:', values);
-
+ 
   return client.query(SQL, values)
     .then(() => response.redirect('/portfolio'))
   // console.log('173:', result);
@@ -182,15 +182,18 @@ function saveRegret(request, response) {
 
 // TODO Callback that gets saved regrets from DB and renders on portfolio.ejs view
 function getPortfolio(request, response) {
+  console.log('getPortfolio() function entered')
   let SQL = 'SELECT * FROM portfolio;';
 
   return client.query(SQL)
     .then(result => {
-      console.log('185 results:', result.rows)
+      // console.log('185 results:', result.rows)
       response.render('pages/portfolio', {regret: result.rows})
     })
     .catch(error => {
+      console.log('193 error caught');
       request.error = error;
+      console.log('request.error', request.error);
       getError(request, response);
     });
 }
@@ -235,6 +238,6 @@ function getSimplifiedData(json) {
 }
 
 function getError(request, response) {
-  console.error(request.error);
+  console.error('From error handler: request.error', request.error);
   response.render('pages/error');
 }
