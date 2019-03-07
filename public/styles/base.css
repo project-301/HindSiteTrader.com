@@ -42,16 +42,16 @@ h1 {
     font-family: 'Nanum Gothic Coding', monospace;
 }
 
-h2 {
-    
-}
-
 span {
     padding: .1em .3em;
     color: hsl(54, 100%, 75%);
     background-color: hsla(266, 69%, 40%, 0.5);
     /* line-height: 1.9em; */
     border-radius: 1em;
+}
+
+strong {
+    font-weight: bold;
 }
 
 em {
@@ -65,6 +65,7 @@ fieldset {
     border-radius: 10px;
     background-color: hsl(266, 69%, 95%);
 }
+
 input {
     border: 2px dashed hsl(266, 69%, 85%);
     background-color: white;

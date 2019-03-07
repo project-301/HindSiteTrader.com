@@ -3,10 +3,8 @@
     /* border-bottom: 1px solid hsl(14, 98%, 22%); */
 }
 
-button:hover{
+button:hover {
     color: hsl(54, 100%, 75%);
-
-    background-color:hsla(266, 69%, 40%, 0.5);
+    background-color: hsla(266, 69%, 40%, 0.5);
     border: inset 3px hsla(266, 69%, 40%, 0.5);
 }
-
