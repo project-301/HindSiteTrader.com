@@ -50,6 +50,7 @@ span {
     padding: .1em .3em;
     color: hsl(54, 100%, 75%);
     background-color: hsla(266, 69%, 40%, 0.5);
+    white-space: nowrap;
     /* line-height: 1.9em; */
     border-radius: 1em;
 }
@@ -60,6 +61,10 @@ strong {
 
 em {
     font-style: italic;
+}
+
+label em {
+    color: hsla(266, 69%, 40%, 0.5);
 }
 
 fieldset {

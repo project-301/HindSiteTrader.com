@@ -17,6 +17,11 @@
 
   <main id="main">
 
+      <% if(typeof regret === 'string') { %>
+        <p>You searched for<span><%= regret %></span></p> 
+        <p>unfortunately, we couldn't find a publicly traded company with that name.</p>
+      <% } else { %>
+
     <section id="result-text-section">
 
       <p>
@@ -59,9 +64,8 @@
           <a href="/"><button>search for a new regret</button></a>
       </div>
     </section>
-      
 
-
+    <% } %>
 
   </main>
 
