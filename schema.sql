@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS portfolio (
   name VARCHAR(50),
   search_date VARCHAR(10), -- unix timestamp (so we can display/use in various ways)
   search_date_price NUMERIC(10, 2),
-  past_price NUMERIC(10, 2),
-  past_date VARCHAR(10), -- unix timestamp (so we can display/use in various ways)
+  cur_date VARCHAR(10), -- unix timestamp (so we can display/use in various ways)
+  cur_price NUMERIC(10, 2),
   investment NUMERIC(10, 2), -- max investment is 99,999,999.99
   investment_worth NUMERIC(10, 2),
   profit NUMERIC(10, 2),

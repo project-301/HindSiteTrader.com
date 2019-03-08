@@ -141,32 +141,6 @@
 
 /* ------------------------------ */
 
-/* tablet view */
-
-/* ------------------------------ */
-
-@media screen and (min-width: 540px) {
-    #body:not(.portfolio) {
-        min-height: auto;
-    }
-    #main:not(.portfolio) {
-        flex-flow: row wrap;
-        height: auto;
-    }
-    #chart-section, #result-text-section, #instructions, #search-form {
-        width: 48%;
-    }
-    #search-form {
-        justify-content: flex-start;
-    }
-    #result-actions-section {
-        width: 100%;
-    }
- 
-}
-
-/* ------------------------------ */
-
 /* portfolio.ejs specific */
 
 /* ------------------------------ */
@@ -201,4 +175,58 @@
 
 #saved-regrets-list li {
     margin: 3px;
+}
+
+/* ------------------------------ */
+
+/* about.ejs specific */
+
+/* ------------------------------ */
+
+.about {
+    margin: 3% 0;
+}
+
+.about img {
+    width: 30vw;
+    height: 30vw;
+    margin: 10px;
+    float: left;
+}
+
+.about p {
+    line-height: 1.2em;
+}
+
+/* ------------------------------ */
+
+/* tablet view */
+
+/* ------------------------------ */
+
+@media screen and (min-width: 540px) {
+    #body:not(.portfolio) {
+        min-height: auto;
+    }
+    #main:not(.portfolio) {
+        flex-flow: row wrap;
+        height: auto;
+    }
+    #chart-section, #result-text-section, #instructions, #search-form {
+        width: 48%;
+    }
+    #search-form {
+        justify-content: flex-start;
+    }
+    #result-actions-section {
+        width: 100%;
+    }
+    .about {
+        width: 50%;
+    }
+    .about img {
+        width: 100%;
+        height: auto;
+        margin: 0;
+    }
 }
