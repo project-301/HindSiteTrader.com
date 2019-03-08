@@ -12,3 +12,26 @@ button:hover {
 #footer img {
     filter: invert(1);
 }
+
+/* ------------------------------ */
+
+/* about.ejs specific */
+
+/* ------------------------------ */
+
+.about {
+    border: 3px inset hsl(44, 79%, 96%);
+    border-radius: 5px;
+    background-color: hsl(266, 69%, 95%);
+    padding: 3%;
+}
+
+.about img {
+    border-radius: 15px 0px 15px 0px;
+    border: solid 2px hsl(266, 69%, 80%);
+}
+
+.about p {
+    font-size: .8em;
+    font-style: italic;
+}

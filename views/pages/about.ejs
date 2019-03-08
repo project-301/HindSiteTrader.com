@@ -1,25 +1,43 @@
-<!-- about.ejs -->
 <!DOCTYPE html>
 <html>
 
-<head>
-  <%- include('../layout/head') %>
-</head>
+  <head>
+    <%- include('../layout/head') %>
+  </head>
 
-<body>
+  <body id="body" class="index">
 
-  <header>
-    <%- include('../layout/header') %>
-  </header>
+    <header id="header">
+      <%- include('../layout/header') %>
+    </header>
 
-  <main>
+    <main id="main">
+      <section id="andrew" class="about">
+          <img src="../styles/faces/Andrew.jpg" alt="Andrew Curtis' Face" height="500" />
+          <h2>Andrew Curtis</h2>
+          <p>Andrew is a software developer whose path into tech was a bit unusual. His expertise in Latin got him his first job in a software company, and from there he moved into project management, where he was first drawn to becoming a developer. After hours you'll find him enjoying the outdoors or holed up with one of his old books of Latin literature.</p>
+      </section>
+      <section id="billy" class="about">
+          <img src="../styles/faces/Billy.jpg" alt="Billy Bunn's Mug" height="500" />
+          <h2>Billy Bunn</h2>
+          <p>Billy is a Northern California transplant, University of Washington graduate, and recovering public accountant. With the help of Code Fellows in Seattle, Billy retired from accounting and pursued his passion for software development and UX design. When he's not coding, he enjoys complaining about the weather and exploring the great Pacific Northwest with his wife.</p>
+      </section>
+      <section id="liz" class="about">
+          <img src="../styles/faces/Liz.jpg" alt="Elizabeth Kavalski's Visage" height="500" />
+          <h2>Liz Kavalski</h2>
+          <p>I grow up in Monroe, Washington and still do. I have a BA in Early Childhood Education from Trinity Lutheran College. Then I worked in childcare centers as a teacher. I decide to switch career because I want a better and healther life. In the future I hope to someday work as a software develper for Boeing or an airline company, because as a child airplanes always fancatied me, so being able to work with planes in someway is like fulfilling a childhood dream.</p>
+      </section>
+      <section id="harrison" class="about">
+          <img src="../styles/faces/Harry.jpg" alt="Harrison Cogswell's Countenance" height="500" />
+          <h2>Harrison Cogswell</h2>
+          <p>Hey there, I'm Harry, the Code Wizard! I grew up mainly in Lake Chelan, over the mountains, but have lived in quite a few different places. Santa Barbara, Portland, New York, and Seattle, but Seattle's always been my favorite, and I'm back to stay! Before Code Fellows, I pursued acting mainly, and musical theater. Went to a New York Acting Conservatory and everything! But since then, I've "settled down", you could say. I'm getting married in two years, and I want a more structured career and life; a house and kids, all that jazz! I live in Redmond, and walk through the Microsoft campus on the way to the bus every morning, and I keep hoping to get a job there after I graduate CF!</p>
+      </section>
+    </main>
 
-  </main>
-
-  <footer>
-    <%- include('../layout/footer') %>
-  </footer>
-
-</body>
+    <footer id="footer">
+      <%- include('../layout/footer') %>
+    </footer>
+    
+  </body>
 
 </html>
