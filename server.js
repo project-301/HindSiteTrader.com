@@ -69,9 +69,11 @@ app.get('/graph-data', (request, response) => {
 // THEN redirect user to portfolio.ejs view
 app.post('/save-regret', saveRegret);
 
-// TODO Portfolio route
 // When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button?), render portfolio view (/views/pages/portfolio.ejs)
 app.get('/portfolio', getPortfolio);
+
+// Route for serving up graph data for portfolio details
+app.get('/portfolio-graph/:regret_id', getGraphData);
 
 // Route for deleting a regret
 app.get('/delete/:regret_id', deleteRegret);
@@ -131,11 +133,11 @@ function getResults(request, response) {
 
   // Creates url for 1st API request
   // Takes string typed out by user, returns search results (and symbols)
-let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
+  let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
   superagent.get(url) // Send 1st API request
     .then(symbolSearchResults => {
-      console.log('symbolSearchResults.body:', symbolSearchResults.body);
+      // console.log('symbolSearchResults.body:', symbolSearchResults.body);
       let symbol = symbolSearchResults.body.bestMatches[0]['1. symbol'];
       let name = symbolSearchResults.body.bestMatches[0]['2. name'];
       console.log('140 symbol:', symbol);
@@ -149,7 +151,7 @@ let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${r
           latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol); // Run response through constructor model
         })
         .then(regret => {
-          console.log('151 latestSavedRegretObj', latestSavedRegretObj)
+          // console.log('151 latestSavedRegretObj', latestSavedRegretObj)
           return response.render('pages/result', { regret: latestSavedRegretObj })
         })
     })
@@ -159,7 +161,7 @@ let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${r
 // Fires when user clicks "Save to my regrets" button
 function saveRegret(request, response) {
   console.log('saveRegret() function entered');
-  console.log('161 latestSavedRegretObj:', latestSavedRegretObj);
+  // console.log('161 latestSavedRegretObj:', latestSavedRegretObj);
 
   let { symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data } = latestSavedRegretObj;
 
@@ -168,11 +170,11 @@ function saveRegret(request, response) {
 
   // TODO Create variable to hold values
   let values = [symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data];
-  console.log('169 values:', values);
- 
+  // console.log('169 values:', values);
+
   return client.query(SQL, values)
     .then(() => response.redirect('/portfolio'))
-  // console.log('173:', result);
+    // console.log('173:', result);
     // })
     .catch(error => {
       console.log('180 error caught');
@@ -189,7 +191,7 @@ function getPortfolio(request, response) {
   return client.query(SQL)
     .then(result => {
       // console.log('185 results:', result.rows)
-      response.render('pages/portfolio', {regret: result.rows})
+      response.render('pages/portfolio', { regret: result.rows })
     })
     .catch(error => {
       console.log('193 error caught');
@@ -205,7 +207,7 @@ function deleteRegret(request, response) {
   // TODO Need to create variable that's assigned id from request.body ?
 
   let SQL = `DELETE FROM portfolio WHERE id=$1;`;
-  let values = [request.params.regret_id];
+  let values = [request.params.data, request.params.labels];
 
   client.query(SQL, values) // NEED to return this or not?
     .then(response.redirect('/portfolio')) // OR re-render? ALSO, verify this route?
@@ -275,6 +277,28 @@ function getSimplifiedData(json) {
 
   return filterMonthly;
 }
+
+
+function getGraphData(request, response) {
+  console.log('Fired getGraphData');
+
+  let SQL = `SELECT graph_labels, graph_data FROM portfolio WHERE id=$1;`;
+  let values = [request.params.regret_id];
+
+  return client.query(SQL, values)
+    .then(result => {
+      console.log('290 result.rows[0]', result.rows[0])
+      response.send({data: result.rows[0].graph_data, labels: result.rows[0].graph_labels})
+    })
+    .catch(error => {
+      console.log('294 error caught');
+      request.error = error;
+      getError(request, response);
+    });
+
+
+}
+
 
 function getError(request, response) {
   console.error('From error handler: request.error', request.error);
