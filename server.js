@@ -18,7 +18,7 @@ require('dotenv').config();
 
 // Application setup
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 7000;
 
 // Express middleware
 // Utilize ExpressJS functionality to parse the body of the request
@@ -137,23 +137,26 @@ function getResults(request, response) {
 
   superagent.get(url) // Send 1st API request
     .then(symbolSearchResults => {
-      // console.log('symbolSearchResults.body:', symbolSearchResults.body);
-      let symbol = symbolSearchResults.body.bestMatches[0]['1. symbol'];
-      let name = symbolSearchResults.body.bestMatches[0]['2. name'];
-      console.log('140 symbol:', symbol);
-      console.log('141 name:', name);
+      if(symbolSearchResults.body.bestMatches.length > 0) {
+        let symbol = symbolSearchResults.body.bestMatches[0]['1. symbol'];
+        let name = symbolSearchResults.body.bestMatches[0]['2. name'];
+        console.log('140 symbol:', symbol);
+        console.log('141 name:', name);
 
-      // Creates url for 2nd API request, using symbol from 1st request
-      let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
+        // Creates url for 2nd API request, using symbol from 1st request
+        let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
-      superagent.get(urlTwo) // Send 2nd API request to get the past stock values
-        .then(priceData => {
-          latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol, request.body.search[2]); // Run response through constructor model
-        })
-        .then(regret => {
-          // console.log('151 latestSavedRegretObj', latestSavedRegretObj)
-          return response.render('pages/result', { regret: latestSavedRegretObj })
-        })
+        superagent.get(urlTwo) // Send 2nd API request to get the past stock values
+          .then(priceData => {
+            latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol, request.body.search[2]); // Run response through constructor model
+          })
+          .then(regret => {
+            // console.log('151 latestSavedRegretObj', latestSavedRegretObj)
+            return response.render('pages/result', { regret: latestSavedRegretObj })
+          })
+      } else {
+        return response.render('pages/result', { regret: request.body.search[1] });
+      }
     })
 }
 
