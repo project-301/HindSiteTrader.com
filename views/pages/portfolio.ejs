@@ -43,10 +43,10 @@
                   <h2 id="chart-title">The growth you <em>could</em> have seen in your <span><%= regret.name %>(<%= regret.symbol %>)</span>
                     investment:</h2>
 
-                  <canvas id="chart"></canvas>
+                  <canvas id="chart-<%= regret.id %>"></canvas>
+                  <a href="/delete/<%= regret.id %>"><button>delete from portfolio</button></a>
                 </div>
 
-                <a href="/delete/<%= regret.id %>"><button>delete from portfolio</button></a>
               </li>
             </ul>
           </li>

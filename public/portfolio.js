@@ -1,6 +1,9 @@
 'use strict';
 
-var canvasEl = document.getElementById('chart').getContext('2d');
+// var canvasEl = document.getElementById('chart').getContext('2d');
+
+let canvasElArray = $('canvas').map(canvas => canvas.html);
+console.log(canvasElArray);
 
 
 // Show/hide details for portfolio
