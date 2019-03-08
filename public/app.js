@@ -28,6 +28,8 @@ $(document).ready(function () { // Runs on page load
 // Uses Chart.js to create a line graph with whatever x and y coordinates passed into it
 function drawChart(xPointsArray, yPointsArray) {
   console.log('ran drawChart()');
+  console.log('canvasEl:',canvasEl);
+
   var resultsChart = new Chart(canvasEl, {
     type: 'line',
     data: {

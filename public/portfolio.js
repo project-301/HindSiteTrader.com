@@ -1,17 +1,9 @@
 'use strict';
 
-// var canvasEl = document.getElementById('chart').getContext('2d');
-
-let canvasElArray = $('canvas').map(canvas => canvas.html);
-console.log(canvasElArray);
-
-
 // Show/hide details for portfolio
 $('li.regret-details').hide();
 $('.regret-header li').on('click', function () {
-  // console.log('event.target:', event.target);
   let hiddenDetails = $(event.target).closest('li.regret-header').next('li');
-  // console.log('thing to show:', hiddenDetails);
   $(hiddenDetails).slideToggle('fast');
 });
 
@@ -21,16 +13,14 @@ $('.regret-header li').on('click', getChartData);
 
 function getChartData() {
   let dataId = $(event.target).closest('li.saved-regret').attr('id')
-  console.log(dataId);
 
   $.ajax({
     url: `/portfolio-graph/${dataId}`,
     method: 'GET',
-    success: function (result) {
-      // $('h1').append(result.data.toString());
+    success: function (result) {``
       let graphData = result.data.toString().split(',').map(value => parseFloat(value));
       let graphLabels = result.labels.toString().split(',');
-      drawChart(graphLabels, graphData)
+      drawChart(graphLabels, graphData, dataId)
     },
     error: function (err) {
       console.log('There was an error getting graph data from the server');
@@ -42,9 +32,9 @@ function getChartData() {
 
 
 // Uses Chart.js to create a line graph with whatever x and y coordinates passed into it
-function drawChart(xPointsArray, yPointsArray) {
+function drawChart(xPointsArray, yPointsArray, canvasId) {
   console.log('ran drawChart()');
-  var resultsChart = new Chart(canvasEl, {
+  var resultsChart = new Chart(`chart-${canvasId}`, {
     type: 'line',
     data: {
       labels: xPointsArray, // x-coordinates

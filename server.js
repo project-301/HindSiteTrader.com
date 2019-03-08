@@ -273,8 +273,6 @@ function getGraphData(request, response) {
       request.error = error;
       getError(request, response);
     });
-
-
 }
 
 
