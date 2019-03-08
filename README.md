@@ -3,9 +3,9 @@
 *a stock market time machine by:*
 *[Billy Bunn](https://github.com/BillyBunn), [Harrison Cogswell](https://github.com/HCoggers), [Andrew Curtis](https://github.com/amjcurtis), and [Liz Kavalski](https://github.com/lizkavalski)*
 
-**URL**: [hindsite.trade](http://hindsite.trade)
+*URL: [hindsite.trade](http://hindsite.trade)*
 
-**Version**: 1.0.0
+*Version: 1.0.0*
 
 ## Overview
 
