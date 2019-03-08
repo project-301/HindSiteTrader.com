@@ -145,10 +145,6 @@
 
 /* ------------------------------ */
 
-#body.portfolio {
-
-}
-
 #main.portfolio {
     display: flex;
     flex-flow: column nowrap;
@@ -159,23 +155,36 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
+}
 
-    background-color: hsl(266, 69%, 95%);
-    /* border: 1px solid red; */
+.saved-regret>ul {
+    background-color: hsla(266, 69%, 40%, 0.5);
+    padding: 3px;
 }
 .regret-header ul li {
     flex-grow: 1;
-    /* border: 2px dotted magenta; */
 }
 
 #chart-section.portfolio {
+    background-color: hsl(266, 69%, 95%);
     width: 100%;
-    margin-bottom: 0px;
+    margin: 5px 0px 0px;
+    padding-bottom: 10px;
     max-height: 100%;
 }
 
 #saved-regrets-list li {
     margin: 3px;
+}
+
+#saved-regrets-list>li:first-of-type>ul {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+#saved-regrets-list>li:last-of-type>ul {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 /* ------------------------------ */
