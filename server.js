@@ -95,18 +95,18 @@ app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
 // Gets reset each time a Regret instance is constructed
 let latestSavedRegretObj = {};
 
-function Regret(apiPriceData, investment, name, symbol) {
-  const datesArray = getSimplifiedData(apiPriceData).map(monthData => monthData['date']);
-  const pricesArray = getSimplifiedData(apiPriceData).map(monthData => parseFloat(monthData['adjPrice'].toFixed(2)));
+function Regret(apiPriceData, investment, name, symbol, userDate) {
+  const datesArray = getSimplifiedData(apiPriceData, userDate).map(monthData => monthData['date']);
+  const pricesArray = getSimplifiedData(apiPriceData, userDate).map(monthData => parseFloat(monthData['adjPrice'].toFixed(2)));
 
   this.symbol = symbol;
   this.name = name;
   this.search_date = datesArray[0];
   this.search_date_price = pricesArray[0];
-  this.past_date = datesArray.slice(-1)[0];
-  this.past_price = pricesArray.slice(-1)[0];
+  this.current_date = datesArray.slice(-1)[0];
+  this.current_price = pricesArray.slice(-1)[0];
   this.investment = investment;
-  this.investment_worth = (this.investment / this.past_price) * this.search_date_price;
+  this.investment_worth = (this.investment / this.search_date_price) * this.current_price;
   this.profit = this.investment_worth - this.investment;
 
   // Fill arrays with data for client-side ajax request (uses Moment.js to reformat dates)
@@ -135,7 +135,7 @@ let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${r
 
   superagent.get(url) // Send 1st API request
     .then(symbolSearchResults => {
-      console.log('symbolSearchResults.body:', symbolSearchResults.body);
+      // console.log('symbolSearchResults.body:', symbolSearchResults.body);
       let symbol = symbolSearchResults.body.bestMatches[0]['1. symbol'];
       let name = symbolSearchResults.body.bestMatches[0]['2. name'];
       console.log('140 symbol:', symbol);
@@ -146,7 +146,7 @@ let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${r
 
       superagent.get(urlTwo) // Send 2nd API request to get the past stock values
         .then(priceData => {
-          latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol); // Run response through constructor model
+          latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol, request.body.search[2]); // Run response through constructor model
         })
         .then(regret => {
           console.log('151 latestSavedRegretObj', latestSavedRegretObj)
@@ -161,13 +161,13 @@ function saveRegret(request, response) {
   console.log('saveRegret() function entered');
   console.log('161 latestSavedRegretObj:', latestSavedRegretObj);
 
-  let { symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data } = latestSavedRegretObj;
+  let { symbol, name, search_date, search_date_price, current_price, current_date, investment, investment_worth, profit, graph_labels, graph_data } = latestSavedRegretObj;
 
-  let SQL = 'INSERT INTO portfolio(symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);';
+  let SQL = 'INSERT INTO portfolio(symbol, name, search_date, search_date_price, current_price, current_date, investment, investment_worth, profit, graph_labels, graph_data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);';
   console.log('166 SQL:', SQL);
 
   // TODO Create variable to hold values
-  let values = [symbol, name, search_date, search_date_price, past_price, past_date, investment, investment_worth, profit, graph_labels, graph_data];
+  let values = [symbol, name, search_date, search_date_price, current_price, current_date, investment, investment_worth, profit, graph_labels, graph_data];
   console.log('169 values:', values);
  
   return client.query(SQL, values)
@@ -216,28 +216,6 @@ function deleteRegret(request, response) {
     });
 }
 
-///////////////////////////////////////////////////////////////
-// FROM TO-DO APP DEMO FOR LAB 13
-/*
-// Route
-app.put('/update/:task_id', updateTask);
-
-// Callback
-function updateTask(request, response) {
-  // destructure variables
-  let { title, description, category, contact, status } = request.body;
-  // need SQL to update the specific task that we were on
-  let SQL = `UPDATE tasks SET title=$1, description=$2, category=$3, contact=$4, status=$5 WHERE id=$6;`;
-  // use request.params.task_id === whatever task we were on
-  let values = [title, description, category, contact, status, request.params.task_id];
-
-  client.query(SQL, values)
-    .then(response.redirect(`/tasks/${request.params.task_id}`))
-    .catch(err => handleError(err, response));
-}
-*/
-////////////////////////////////////////////////////////////////
-
 // TODO Render "About Us" view
 // function getAbout(request, response) {
 //   response.render('pages/about');
@@ -245,7 +223,7 @@ function updateTask(request, response) {
 // }
 
 // Function to go through daily stock data from API, account for any stock split events, and return a simplified array for the close of each month
-function getSimplifiedData(json) {
+function getSimplifiedData(json, userDate) {
   let splitCo = 1;
 
   let simplifiedArray = Object.entries(json['Time Series (Daily)']).map(value => {
@@ -266,7 +244,7 @@ function getSimplifiedData(json) {
     } else {
       return true;
     }
-    if (day['date'].slice(0, 7) !== month) {
+    if (day['date'].slice(0, 7) !== month && day['date'].slice(0, 7) >= userDate) {
       return true;
     } else {
       return false;
