@@ -1,8 +1,9 @@
 # HindSite Trader
-[hindsite.trade](http://hindsite.trade)
 
 *a stock market time machine by:*
 *[Billy Bunn](https://github.com/BillyBunn), [Harrison Cogswell](https://github.com/HCoggers), [Andrew Curtis](https://github.com/amjcurtis), and [Liz Kavalski](https://github.com/lizkavalski)*
+
+**URL**: [hindsite.trade](http://hindsite.trade)
 
 **Version**: 1.0.0
 
@@ -27,24 +28,32 @@ You can run our app locally following these steps:
 
 * Install Node.js
 * If you're on a Mac, you'll need to install [Homebrew](https://brew.sh)
-* Clone this GitHubu repo
+* Clone this GitHub repo
 * Run `npm i` within the repo's root directory to install our app dependencies
 * Install Nodemon globally with `npm i -g nodemon`
 * Install [PostgreSQL](https://www.postgresql.org/download)
 * Create a `.env` file to store your local environment variables
-* Run PostgreSQL (`sudo service postgresql start` on Windows/WSL or Linux, or `brew services start postgresq` on Mac), create a local database (`psql CREATE DATABASE <database_name>`), and add our SQL schema to it (`psql -f schema.sql -d <database_name>`) 
+* Run PostgreSQL
+** `sudo service postgresql start` on Windows/WSL or Linux
+** `brew services start postgresq` on Mac
+* Create a local database: `psql CREATE DATABASE <database_name>`
+* Add our SQL schema to your database: `psql -f schema.sql -d <database_name>`
 * Get your own API key from [Alpha Vantage](https://www.alphavantage.co/) and add it to your `.env` file
 * Add your PostgreSQL database URL to your `.env` file
-* Run Nodemon (`nodemon`) from within root directory of the cloned repo
-* Open localhost:3000 in your browser
+* Run Nodemon from within the root directory of the cloned repo
+* Open `localhost:3000` in your browser
 
 ## Change Log
 
 `03-04-2019` Planned features and app page flow, designed wireframes, whiteboarded out app views and DOM trees. Built out repo structure and file scaffolding. Deployed app to Heroku for basic proof of life.
+
 `03-05-2019` Added dummy JSON data for modeling and testing SQL schema. Added basic styling.
-`03-06-2019` Implemented styling across all app pages. Replaced dummy JSON data with real API responses. "The Great Stock Split Fix of 2019." - J. Harrison Cogswell.
+
+`03-06-2019` Implemented styling across all app pages. Replaced dummy JSON data with real API responses. "The Great Stock Split Fix of 2019."
+
 `03-07-2019` Finish database integration and functionality for displaying individual charts for saved searches. Finalized styling.
-`03-08-2019` Added form validation and site documentation.
+
+`03-08-2019` Added form validation and app documentation.
 
 ## Credits
 *Powered by: Alpha Vantage API*
