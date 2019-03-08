@@ -43,6 +43,42 @@ You can run our app locally following these steps:
 * Run Nodemon from within the root directory of the cloned repo
 * Open `localhost:3000` in your browser
 
+## Sample Response from API Endpoint
+
+```
+{
+    "Meta Data": {
+        "1. Information": "Daily Time Series with Splits and Dividend Events",
+        "2. Symbol": "AAPL",
+        "3. Last Refreshed": "2019-03-06 12:57:53",
+        "4. Output Size": "Full size",
+        "5. Time Zone": "US/Eastern"
+    },
+    "Time Series (Daily)": {
+        "2019-03-06": {
+            "1. open": "174.6700",
+            "2. high": "175.4900",
+            "3. low": "173.9400",
+            "4. close": "174.7000",
+            "5. adjusted close": "174.7000",
+            "6. volume": "10789704",
+            "7. dividend amount": "0.0000",
+            "8. split coefficient": "1.0000"
+        },
+        "2019-03-05": {
+            "1. open": "175.9400",
+            "2. high": "176.0000",
+            "3. low": "174.5400",
+            "4. close": "175.5300",
+            "5. adjusted close": "175.5300",
+            "6. volume": "19737419",
+            "7. dividend amount": "0.0000",
+            "8. split coefficient": "1.0000"
+        }
+    }
+}    
+```
+
 ## Change Log
 
 `03-04-2019` Planned features and app page flow, designed wireframes, whiteboarded out app views and DOM trees. Built out repo structure and file scaffolding. Deployed app to Heroku for basic proof of life.
