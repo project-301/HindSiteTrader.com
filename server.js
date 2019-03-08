@@ -78,7 +78,7 @@ app.get('/delete/:regret_id', deleteRegret);
 
 // About Us route
 // When user clicks on "About" link in footer, renders "about us" view (/views/pages/about.ejs)
-// app.get('/about', getAbout)
+app.get('/about', getAbout)
 
 // Error route / catch-all route
 // Renders the error view (/views/pages/error.ejs)
@@ -163,7 +163,7 @@ function saveRegret(request, response) {
 
   let { symbol, name, search_date, search_date_price, current_price, current_date, investment, investment_worth, profit, graph_labels, graph_data } = latestSavedRegretObj;
 
-  let SQL = 'INSERT INTO portfolio(symbol, name, search_date, search_date_price, current_price, current_date, investment, investment_worth, profit, graph_labels, graph_data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);';
+  let SQL = 'INSERT INTO portfolio(symbol, name, search_date, search_date_price, cur_price, cur_date, investment, investment_worth, profit, graph_labels, graph_data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);';
   console.log('166 SQL:', SQL);
 
   // TODO Create variable to hold values
@@ -217,10 +217,10 @@ function deleteRegret(request, response) {
 }
 
 // TODO Render "About Us" view
-// function getAbout(request, response) {
-//   response.render('pages/about');
-//   app.use(express.static('./public'));
-// }
+function getAbout(request, response) {
+  response.render('pages/about');
+  app.use(express.static('./public'));
+}
 
 // Function to go through daily stock data from API, account for any stock split events, and return a simplified array for the close of each month
 function getSimplifiedData(json, userDate) {
