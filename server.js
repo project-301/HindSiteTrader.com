@@ -133,31 +133,38 @@ function getResults(request, response) {
 
   // Creates url for 1st API request
   // Takes string typed out by user, returns search results (and symbols)
-  let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
+
+  // -------------------UNCOMMENT THIS WHEN THE API WORKS AGAIN ---------------------
+  /* let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
   superagent.get(url) // Send 1st API request
     .then(symbolSearchResults => {
-      if(symbolSearchResults.body.bestMatches.length > 0) {
-        let symbol = symbolSearchResults.body.bestMatches[0]['1. symbol'];
-        let name = symbolSearchResults.body.bestMatches[0]['2. name'];
-        console.log('140 symbol:', symbol);
-        console.log('141 name:', name);
+      // if(symbolSearchResults.body.bestMatches.length > 0) {
+      let symbol = symbolSearchResults.body.bestMatches[0]['1. symbol'];
+      let name = symbolSearchResults.body.bestMatches[0]['2. name'];
+      console.log('140 symbol:', symbol);
+      console.log('141 name:', name); */
+  // ---------------------------------------------------------------------------------
+      
+  // Creates url for 2nd API request, using symbol from 1st request
+  // replace request.body.search[1] with symbol when API works
+  let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
-        // Creates url for 2nd API request, using symbol from 1st request
-        let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
-
-        superagent.get(urlTwo) // Send 2nd API request to get the past stock values
-          .then(priceData => {
-            latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol, request.body.search[2]); // Run response through constructor model
-          })
-          .then(regret => {
-            // console.log('151 latestSavedRegretObj', latestSavedRegretObj)
-            return response.render('pages/result', { regret: latestSavedRegretObj })
-          })
-      } else {
-        return response.render('pages/result', { regret: request.body.search[1] });
-      }
+  superagent.get(urlTwo) // Send 2nd API request to get the past stock values
+    .then(priceData => {
+      // change request.body.search[1] to name and symbol, respectively, when API works
+      latestSavedRegretObj = new Regret(priceData.body, investment, request.body.search[1], request.body.search[1], request.body.search[2]); // Run response through constructor model
     })
+    .then(regret => {
+      return response.render('pages/result', { regret: latestSavedRegretObj })
+    })
+    // -----------------------UNCOMMENT WHEN API WORKS---------------------------
+    /* } else {
+      return response.render('pages/result', { regret: request.body.search[1] });
+    }
+    }) */
+    // ---------------------------------------------------------------------------
+
 }
 
 // TODO Callback to save regret object to SQL portfolio table
@@ -174,7 +181,7 @@ function saveRegret(request, response) {
   // TODO Create variable to hold values
   let values = [symbol, name, search_date, search_date_price, current_price, current_date, investment, investment_worth, profit, graph_labels, graph_data];
   console.log('169 values:', values);
- 
+
   return client.query(SQL, values)
     .then(() => response.redirect('/portfolio'))
     // console.log('173:', result);
@@ -269,7 +276,7 @@ function getGraphData(request, response) {
   return client.query(SQL, values)
     .then(result => {
       console.log('290 result.rows[0]', result.rows[0])
-      response.send({data: result.rows[0].graph_data, labels: result.rows[0].graph_labels})
+      response.send({ data: result.rows[0].graph_data, labels: result.rows[0].graph_labels })
     })
     .catch(error => {
       console.log('294 error caught');
