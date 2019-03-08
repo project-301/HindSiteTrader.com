@@ -8,8 +8,8 @@ $(document).ready(function () { // Runs on page load
   console.log('ran fetchChartData');
 
   $.ajax({
-    // url is the current url up until the last foward-slash + /graph-data (the route server.js is listening for)
-    url: `${window.location.href.substr(0, window.location.href.lastIndexOf('/'))}/graph-data`,
+    // /graph-data fires a function to send graph data in server.js
+    url: '/graph-data',
     method: 'GET',
     context: document.body
   })

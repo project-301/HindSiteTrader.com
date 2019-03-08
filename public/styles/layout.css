@@ -171,6 +171,7 @@
 #chart-section.portfolio {
     width: 100%;
     margin-bottom: 0px;
+    max-height: 100%;
 }
 
 #saved-regrets-list li {

@@ -5,6 +5,8 @@
 <head>
   <%- include('../layout/head') %>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+
 </head>
 
 <body id="body">
@@ -17,11 +19,10 @@
     <h2 id="portfolio-title">Your Regret Portfolio</h2>
 
     <!-- Render DB on page -->
-    <% console.log('regret', regret); %>
     <% if (regret.length > 0) { %>
       <ul id="saved-regrets-list">
         <% regret.forEach(regret => { %>
-          <li data-id="<%= regret.id %>">
+          <li data-id="<%= regret.id %>" id="<%= regret.id %>" class="saved-regret">
             <ul>
               <li class="regret-header">
                 <ul>
@@ -42,10 +43,10 @@
                   <h2 id="chart-title">The growth you <em>could</em> have seen in your <span><%= regret.name %>(<%= regret.symbol %>)</span>
                     investment:</h2>
 
-                  <canvas id="chart"></canvas>
+                  <canvas id="chart-<%= regret.id %>"></canvas>
+                  <a href="/delete/<%= regret.id %>"><button>delete from portfolio</button></a>
                 </div>
 
-                <a href="/delete/<%= regret.id %>"><button>delete from portfolio</button></a>
               </li>
             </ul>
           </li>
