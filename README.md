@@ -89,7 +89,9 @@ You can run our app locally following these steps:
 
 `03-07-2019` Finish database integration and functionality for displaying individual charts for saved searches. Finalized styling.
 
-`03-08-2019` Added form validation and app documentation.
+`03-08-2019` Added form validation and app documentation. Hotfix for Alpha Vantage API's search endpoint being down; allows user to search using ticker symbols instead of company names. 
+
+`03-09-2019` Restored first API call, users can search any company name again; Alpha Vantage API's search endpoint has been fixed.
 
 ## Credits
 *Powered by: Alpha Vantage API*
