@@ -146,7 +146,6 @@ function getResults(request, response) {
 
         superagent.get(urlTwo) // Send 2nd API request to get the past stock values
           .then(priceData => {
-            // change request.body.search[1] to name and symbol, respectively, when API works
             latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol, request.body.search[2]); /// Run response through constructor model
           })
           .then(regret => {
