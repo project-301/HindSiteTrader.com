@@ -90,7 +90,7 @@ app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
 // Models
 // **************************************************
 
-// Object that includes arrays of chart data to be passed to client-side app.js 
+// Object that includes arrays of chart data to be passed to client-side app.js
 // Gets reset each time a Regret instance is constructed
 let latestSavedRegretObj = {};
 
@@ -131,37 +131,30 @@ function getResults(request, response) {
   // Creates url for 1st API request
   // Takes string typed out by user, returns search results (and symbols)
 
-  // -------------------UNCOMMENT THIS WHEN THE API WORKS AGAIN ---------------------
-  /* let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
+  let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
   superagent.get(url) // Send 1st API request
     .then(symbolSearchResults => {
-      // if(symbolSearchResults.body.bestMatches.length > 0) {
-      let symbol = symbolSearchResults.body.bestMatches[0]['1. symbol'];
-      let name = symbolSearchResults.body.bestMatches[0]['2. name'];
-      console.log('140 symbol:', symbol);
-      console.log('141 name:', name); */
-  // ---------------------------------------------------------------------------------
-      
-  // Creates url for 2nd API request, using symbol from 1st request
-  // replace request.body.search[1] with symbol when API works
-  let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
+      if (symbolSearchResults.body.bestMatches.length > 0) {
+        let symbol = symbolSearchResults.body.bestMatches[0]['1. symbol'];
+        let name = symbolSearchResults.body.bestMatches[0]['2. name'];
+        console.log('140 symbol:', symbol);
+        console.log('141 name:', name);
 
-  superagent.get(urlTwo) // Send 2nd API request to get the past stock values
-    .then(priceData => {
-      // change request.body.search[1] to name and symbol, respectively, when API works
-      latestSavedRegretObj = new Regret(priceData.body, investment, request.body.search[1], request.body.search[1], request.body.search[2]); // Run response through constructor model
-    })
-    .then(regret => {
-      return response.render('pages/result', { regret: latestSavedRegretObj })
-    })
-    // -----------------------UNCOMMENT WHEN API WORKS---------------------------
-    /* } else {
-      return response.render('pages/result', { regret: request.body.search[1] });
-    }
-    }) */
-    // ---------------------------------------------------------------------------
+        // Creates url for 2nd API request, using symbol from 1st request
+        let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
+        superagent.get(urlTwo) // Send 2nd API request to get the past stock values
+          .then(priceData => {
+            latestSavedRegretObj = new Regret(priceData.body, investment, name, symbol, request.body.search[2]); /// Run response through constructor model
+          })
+          .then(regret => {
+            return response.render('pages/result', { regret: latestSavedRegretObj })
+          })
+      } else {
+        return response.render('pages/result', { regret: request.body.search[1] });
+      }
+    })
 }
 
 // Callback to save regret object to SQL portfolio table
@@ -192,7 +185,7 @@ function saveRegret(request, response) {
 // Gets saved regrets from DB and renders on portfolio.ejs view
 function getPortfolio(request, response) {
   console.log('getPortfolio function entered')
-  let SQL = 'SELECT * FROM portfolio;'; 
+  let SQL = 'SELECT * FROM portfolio;';
 
   return client.query(SQL)
     .then(result => {
@@ -213,8 +206,8 @@ function deleteRegret(request, response) {
   let SQL = `DELETE FROM portfolio WHERE id=$1;`;
   let values = [request.params.regret_id];
 
-  client.query(SQL, values) 
-    .then(response.redirect('/portfolio')) 
+  client.query(SQL, values)
+    .then(response.redirect('/portfolio'))
     .catch(error => {
       console.log('216 error caught');
       request.error = error;
