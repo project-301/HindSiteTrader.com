@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('./public'));
 
 // Middleware to handle PUT and DELETE
-// Modelled on demo code in seattle-301d44/13-update-delete/demos/todo-app/server.js:
+// Not actually being used in our app as of 3/9/19
 app.use(methodOverride((request, response) => {
   if (request.body && typeof request.body === 'object' && '_method' in request.body) {
     // look in urlencoded POST bodies and delete it
@@ -63,19 +63,16 @@ app.get('/graph-data', (request, response) => {
   response.send({ labels: latestSavedRegretObj.graph_labels, data: latestSavedRegretObj.graph_data })
 });
 
-// TODO "Save Regret" route
-// When user clicks "Save to my results" button, update latest Regret object to contain new Regret created in getResults() function
-// THEN insert the Regret object into DB
-// THEN redirect user to portfolio.ejs view
+// "Save Regret" route
 app.post('/save-regret', saveRegret);
 
-// When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button?), render portfolio view (/views/pages/portfolio.ejs)
+// When user clicks on portfolio icon in header (OR clicks "Save to my regrets" button), render portfolio view (/views/pages/portfolio.ejs)
 app.get('/portfolio', getPortfolio);
 
 // Route for serving up graph data for portfolio details
 app.get('/portfolio-graph/:regret_id', getGraphData);
 
-// Route for deleting a regret
+// Route for deleting a regret from portfolio
 app.get('/delete/:regret_id', deleteRegret);
 
 // About Us route
@@ -160,7 +157,7 @@ function getResults(request, response) {
     })
 }
 
-// TODO Callback to save regret object to SQL portfolio table
+// Callback to save regret object to SQL portfolio table
 // Fires when user clicks "Save to my regrets" button
 function saveRegret(request, response) {
   console.log('saveRegret() function entered');
@@ -171,7 +168,6 @@ function saveRegret(request, response) {
   let SQL = 'INSERT INTO portfolio(symbol, name, search_date, search_date_price, cur_price, cur_date, investment, investment_worth, profit, graph_labels, graph_data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);';
   console.log('166 SQL:', SQL);
 
-  // TODO Create variable to hold values
   let values = [symbol, name, search_date, search_date_price, current_price, current_date, investment, investment_worth, profit, graph_labels, graph_data];
   console.log('169 values:', values);
  
@@ -186,10 +182,10 @@ function saveRegret(request, response) {
     });
 }
 
-// TODO Callback that gets saved regrets from DB and renders on portfolio.ejs view
+// Gets saved regrets from DB and renders on portfolio.ejs view
 function getPortfolio(request, response) {
   console.log('getPortfolio function entered')
-  let SQL = 'SELECT * FROM portfolio;'; // NEED to filter out some columns for rendering?
+  let SQL = 'SELECT * FROM portfolio;'; 
 
   return client.query(SQL)
     .then(result => {
@@ -203,17 +199,15 @@ function getPortfolio(request, response) {
     });
 }
 
-// TODO Function to delete a saved regret from portfolio
+// Deletes a saved regret from portfolio
 function deleteRegret(request, response) {
   console.log('deleteRegret function entered');
-
-  // TODO Need to create variable that's assigned id from request.body ?
 
   let SQL = `DELETE FROM portfolio WHERE id=$1;`;
   let values = [request.params.regret_id];
 
-  client.query(SQL, values) // NEED to return this or not?
-    .then(response.redirect('/portfolio')) // OR re-render? ALSO, verify this route?
+  client.query(SQL, values) 
+    .then(response.redirect('/portfolio')) 
     .catch(error => {
       console.log('216 error caught');
       request.error = error;
@@ -221,13 +215,13 @@ function deleteRegret(request, response) {
     });
 }
 
-// TODO Render "About Us" view
+// Renders "About Us" view
 function getAbout(request, response) {
   response.render('pages/about');
   app.use(express.static('./public'));
 }
 
-// Function to go through daily stock data from API, account for any stock split events, and return a simplified array for the close of each month
+// Goes through daily stock data from API, account for any stock split events, and return a simplified array for the close of each month
 function getSimplifiedData(json, userDate) {
   let splitCo = 1;
 
@@ -259,7 +253,6 @@ function getSimplifiedData(json, userDate) {
   return filterMonthly;
 }
 
-
 function getGraphData(request, response) {
   console.log('Fired getGraphData');
 
@@ -277,7 +270,6 @@ function getGraphData(request, response) {
       getError(request, response);
     });
 }
-
 
 function getError(request, response) {
   console.error('From error handler: request.error', request.error);

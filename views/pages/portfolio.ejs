@@ -33,11 +33,11 @@
               </li>
               <li class="regret-details">
                 <p>
-                  If you invested <span><%= regret.investment %></span> in <span><%= regret.name %>(<%= regret.symbol %>)</span> on <span><%= regret.search_date %></span>, your
-                  investment would be worth <span><%= regret.investment_worth %></span>.
+                  If you had invested <span>$<%= regret.investment %></span> in <span><%= regret.name %>(<%= regret.symbol %>)</span> on <span><%= regret.search_date %></span>, your
+                  investment would be worth <span>$<%= regret.investment_worth %></span>.
                 </p>
 
-                <p>You would be <span><%= regret.profit %></span> richer!</p>
+                <p>You would be <span>$<%= regret.profit %></span> richer!</p>
 
                 <div id="chart-section" class="portfolio">
                   <h2 id="chart-title">The growth you <em>could</em> have seen in your <span><%= regret.name %>(<%= regret.symbol %>)</span>
@@ -54,7 +54,7 @@
       </ul>
     <% } else { %>
     <!-- If no rows in database -->
-    <p>You have No regrets</p>
+    <p>You have no regrets!</p>
     <% } %>
 
   </main>
