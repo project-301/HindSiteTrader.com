@@ -33,14 +33,14 @@
               </li>
               <li class="regret-details">
                 <p>
-                  If you had invested <span>$<%= regret.investment %></span> in <span><%= regret.name %>(<%= regret.symbol %>)</span> on <span><%= regret.search_date %></span>, your
+                  If you had invested <span>$<%= regret.investment %></span> in <span><%= regret.name %> (<%= regret.symbol %>)</span> on <span><%= regret.search_date %></span>, your
                   investment would be worth <span>$<%= regret.investment_worth %></span>.
                 </p>
 
                 <p>You would be <span>$<%= regret.profit %></span> richer!</p>
 
                 <div id="chart-section" class="portfolio">
-                  <h2 id="chart-title">The growth you <em>could</em> have seen in your <span><%= regret.name %>(<%= regret.symbol %>)</span>
+                  <h2 id="chart-title">The growth you <em>could</em> have seen in your <span><%= regret.name %> (<%= regret.symbol %>)</span>
                     investment:</h2>
 
                   <canvas id="chart-<%= regret.id %>"></canvas>
