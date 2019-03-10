@@ -27,7 +27,7 @@
       <p>
         If you invested <span>$<%= parseFloat(regret.investment).toFixed(2)  %></span>
         <br />
-        in <span><%= regret.name %>(<%= regret.symbol %>)</span>
+        in <span><%= regret.name %> (<%= regret.symbol %>)</span>
         <br />
         on <span><%= regret.search_date %></span>,
         <br />
@@ -47,7 +47,7 @@
     <div id="chart-section">
       <h2 id="chart-title">The growth you <em>could</em> have seen in your
         <br />
-        <span><%= regret.name %>(<%= regret.symbol %>)</span>
+        <span><%= regret.name %> (<%= regret.symbol %>)</span>
         <!-- <br /> -->
         investment:</h2>
       <canvas id="chart"></canvas>
