@@ -8,7 +8,6 @@
 const express = require('express');
 const superagent = require('superagent');
 const pg = require('pg');
-const methodOverride = require('method-override');
 // moment.js helps with formatting dates for the line graph
 const moment = require('moment');
 moment().format();
@@ -25,17 +24,6 @@ const PORT = process.env.PORT || 7000;
 app.use(express.urlencoded({ extended: true }));
 // Specify a directory for static resources
 app.use(express.static('./public'));
-
-// Middleware to handle PUT and DELETE
-// Not actually being used in our app as of 3/9/19
-app.use(methodOverride((request, response) => {
-  if (request.body && typeof request.body === 'object' && '_method' in request.body) {
-    // look in urlencoded POST bodies and delete it
-    let method = request.body._method;
-    delete request.body._method;
-    return method;
-  }
-}))
 
 // Database setup
 const client = new pg.Client(process.env.DATABASE_URL);
