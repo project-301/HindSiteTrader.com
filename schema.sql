@@ -1,10 +1,8 @@
 DROP TABLE portfolio;
 
--- Per convo with Sam on Monday...
--- We should store graph coordinates inside of our portfolio table (no need for a second table)
--- We only need to store the prices (the y-axis), as the x-axis will always 5 equidistant points
+-- Should store graph coordinates inside of our portfolio table (no need for a second table)
+-- Only need to store the prices (the y-axis), as the x-axis will always be 5 equidistant points
 -- (5 date points spaced apart evently, beginning with the past_date and ending with the search_date) 
--- To get the 
 
 CREATE TABLE IF NOT EXISTS portfolio (
   id SERIAL PRIMARY KEY,
