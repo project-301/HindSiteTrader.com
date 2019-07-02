@@ -33,9 +33,9 @@ client.on('error', err => console.log('44 error', err));
 // Sets the view engine for server-side templating
 app.set('view engine', 'ejs');
 
-// **************************************************
+///////////////////////////////////////////
 // Routes
-// **************************************************
+///////////////////////////////////////////
 
 // Home page route
 // When user navigates to site url, renders homepage (views/index.ejs)
@@ -74,9 +74,9 @@ app.get('*', getError);
 // Make sure server is listening for requests ("flips the switch" to turn the server "on")
 app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
 
-// **************************************************
+///////////////////////////////////////////
 // Models
-// **************************************************
+///////////////////////////////////////////
 
 // Object that includes arrays of chart data to be passed to client-side app.js
 // Gets reset each time a Regret instance is constructed
@@ -101,9 +101,9 @@ function Regret(apiPriceData, investment, name, symbol, userDate) {
   this.graph_data = pricesArray.toString(); // y-coordinates
 }
 
-// **************************************************
+///////////////////////////////////////////
 // Helper functions
-// **************************************************
+///////////////////////////////////////////
 
 // Renders index.ejs view at base url
 function getSearchForm(request, response) {
@@ -113,12 +113,10 @@ function getSearchForm(request, response) {
 
 // Renders pages/result.ejs view on submit
 function getResults(request, response) {
-  console.log('fired getResults()');
   let investment = request.body.search[0];
 
   // Creates url for 1st API request
   // Takes string typed out by user, returns search results (and symbols)
-
   let url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${request.body.search[1]}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
 
   superagent.get(url) // Send 1st API request
@@ -126,8 +124,6 @@ function getResults(request, response) {
       if (symbolSearchResults.body.bestMatches.length > 0) {
         let symbol = symbolSearchResults.body.bestMatches[0]['1. symbol'];
         let name = symbolSearchResults.body.bestMatches[0]['2. name'];
-        console.log('140 symbol:', symbol);
-        console.log('141 name:', name);
 
         // Creates url for 2nd API request, using symbol from 1st request
         let urlTwo = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=full&apikey=${process.env.ALPHAVANTAGE_API_KEY}`;
@@ -148,23 +144,15 @@ function getResults(request, response) {
 // Callback to save regret object to SQL portfolio table
 // Fires when user clicks "Save to my regrets" button
 function saveRegret(request, response) {
-  console.log('saveRegret() function entered');
-  // console.log('161 latestSavedRegretObj:', latestSavedRegretObj);
-
   let { symbol, name, search_date, search_date_price, current_price, current_date, investment, investment_worth, profit, graph_labels, graph_data } = latestSavedRegretObj;
 
   let SQL = 'INSERT INTO portfolio(symbol, name, search_date, search_date_price, cur_price, cur_date, investment, investment_worth, profit, graph_labels, graph_data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);';
-  console.log('166 SQL:', SQL);
 
   let values = [symbol, name, search_date, search_date_price, current_price, current_date, investment, investment_worth, profit, graph_labels, graph_data];
-  console.log('169 values:', values);
 
   return client.query(SQL, values)
     .then(() => response.redirect('/portfolio'))
-    // console.log('173:', result);
-    // })
     .catch(error => {
-      console.log('180 error caught');
       request.error = error;
       getError(request, response)
     });
@@ -172,16 +160,13 @@ function saveRegret(request, response) {
 
 // Gets saved regrets from DB and renders on portfolio.ejs view
 function getPortfolio(request, response) {
-  console.log('getPortfolio function entered')
   let SQL = 'SELECT * FROM portfolio;';
 
   return client.query(SQL)
     .then(result => {
-      // console.log('185 results:', result.rows)
       response.render('pages/portfolio', { regret: result.rows })
     })
     .catch(error => {
-      console.log('193 error caught');
       request.error = error;
       getError(request, response);
     });
@@ -189,15 +174,12 @@ function getPortfolio(request, response) {
 
 // Deletes a saved regret from portfolio
 function deleteRegret(request, response) {
-  console.log('deleteRegret function entered');
-
   let SQL = `DELETE FROM portfolio WHERE id=$1;`;
   let values = [request.params.regret_id];
 
   client.query(SQL, values)
     .then(response.redirect('/portfolio'))
     .catch(error => {
-      console.log('216 error caught');
       request.error = error;
       getError(request, response);
     });
@@ -211,7 +193,7 @@ function getAbout(request, response) {
 
 // Goes through daily stock data from API, account for any stock split events, and return a simplified array for the close of each month
 function getSimplifiedData(json, userDate) {
-  let splitCo = 1;
+  let splitCo = 1; // Initialize split coefficient
 
   let simplifiedArray = Object.entries(json['Time Series (Daily)']).map(value => {
     let newObj = { date: value[0], price: value[1]['4. close'], split: value[1]['8. split coefficient'] };
@@ -242,18 +224,14 @@ function getSimplifiedData(json, userDate) {
 }
 
 function getGraphData(request, response) {
-  console.log('Fired getGraphData');
-
   let SQL = `SELECT graph_labels, graph_data FROM portfolio WHERE id=$1;`;
   let values = [request.params.regret_id];
 
   return client.query(SQL, values)
     .then(result => {
-      console.log('290 result.rows[0]', result.rows[0])
       response.send({ data: result.rows[0].graph_data, labels: result.rows[0].graph_labels })
     })
     .catch(error => {
-      console.log('294 error caught');
       request.error = error;
       getError(request, response);
     });
